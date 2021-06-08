@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sofas">Sofas</string>
+    <string name="chairs">Chairs</string>
+    <string name="cupboards">Cupboards</string>
+    <string name="my_account">My Account</string>
+    <string name="store_locator">Store Locator</string>
+    <string name="my_order">My Order</string>
+    <string name="logout">Logout</string>
+</resources>
