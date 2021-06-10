@@ -6,6 +6,7 @@ import com.example.neosoftassignmentproject.adapter.UserProductAdapter
 import com.example.neosoftassignmentproject.repository.UserRepository
 import com.example.neosoftassignmentproject.viewmodels.HomeViewModel
 import com.example.neosoftassignmentproject.viewmodels.LoginViewmodel
+import com.example.neosoftassignmentproject.viewmodels.ProductListViewModel
 import com.example.neosoftassignmentproject.viewmodels.RegisterViewmodel
 import com.example.neosoftassignmentproject.views.RegisterFragment
 import java.lang.IllegalArgumentException
@@ -20,6 +21,9 @@ class RegisterViewmodelfactory(val repository: UserRepository):ViewModelProvider
         }
         else  if (modelClass.isAssignableFrom(HomeViewModel::class.java)){
             return HomeViewModel(repository) as T
+        }
+        else if (modelClass.isAssignableFrom(ProductListViewModel::class.java)){
+            return ProductListViewModel(repository) as T
         }
         throw IllegalArgumentException("Viewmodelfactory")
     }
