@@ -5,20 +5,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.neosoftassignmentproject.model.GetUserData
+import com.example.neosoftassignmentproject.model.GetProductList
 import com.example.neosoftassignmentproject.repository.UserRepository
 import kotlinx.coroutines.launch
 
-class HomeViewModel(val repository: UserRepository):ViewModel() {
-    private val product=MutableLiveData<GetUserData>()
-    val getProduct:LiveData<GetUserData>
+class ProductListViewModel(val repository: UserRepository):ViewModel() {
+    private val product=MutableLiveData<GetProductList>()
+    val ProductList:LiveData<GetProductList>
     get() = product
 
 
-    fun getProduct(access_token:String){
+    fun getProductList(product_category_id:String){
         viewModelScope.launch {
             try {
-                val response=repository.getUser(access_token)
+                val response=repository.getProduct(product_category_id)
                product.value=response
               //  val value= response.data.product_categories[1]
             }catch (ex:Exception){

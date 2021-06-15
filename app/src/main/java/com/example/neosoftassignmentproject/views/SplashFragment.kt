@@ -35,18 +35,22 @@ class SplashFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        UserPreferences(requireContext()).getUserId.asLiveData().observe(viewLifecycleOwner) {
+        UserPreferences(requireContext()).getAccessToken.asLiveData().observe(viewLifecycleOwner) {
             Handler().postDelayed({
                 if (it == "0") {
                     findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
+
                 } else {
                     val intent = Intent(requireContext(), HomeActivity::class.java)
                     startActivity(intent)
+                    activity?.finish()
                 }
 
 
             }, 3000)
 
         }
+
     }
+
 }

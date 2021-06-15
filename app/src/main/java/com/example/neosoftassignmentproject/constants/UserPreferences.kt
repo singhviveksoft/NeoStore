@@ -20,6 +20,7 @@ class UserPreferences(context: Context) {
 
     companion object{
         val USER_ID_KEY= stringPreferencesKey("access_token")
+        val ADDRESS= stringPreferencesKey("address")
     }
 
     suspend fun setAccesToken(access_token:String){
@@ -28,9 +29,22 @@ class UserPreferences(context: Context) {
         }
     }
 
-    val getUserId: Flow<String> = mDataStore.data.map {
+    val getAccessToken: Flow<String> = mDataStore.data.map {
         it[USER_ID_KEY] ?: "0"
     }
+
+    suspend fun setAddress(address:String){
+        mDataStore.edit {
+            it[ADDRESS]=address
+        }
+    }
+
+    val getAddress:Flow<String> = mDataStore.data.map {
+        it[ADDRESS] ?:"0"
+    }
+
+
+
 
 
 

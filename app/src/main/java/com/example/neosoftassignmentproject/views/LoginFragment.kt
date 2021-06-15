@@ -16,9 +16,8 @@ import com.example.neosoftassignmentproject.R
 import com.example.neosoftassignmentproject.constants.UserPreferences
 import com.example.neosoftassignmentproject.constants.interfaces.Api
 import com.example.neosoftassignmentproject.databinding.FragmentLoginBinding
-import com.example.neosoftassignmentproject.model.UserLoginData
 import com.example.neosoftassignmentproject.repository.UserRepository
-import com.example.neosoftassignmentproject.viewModelFactory.RegisterViewmodelfactory
+import com.example.neosoftassignmentproject.viewModelFactory.UserViewmodelfactory
 import com.example.neosoftassignmentproject.viewmodels.LoginViewmodel
 import kotlinx.coroutines.launch
 
@@ -36,7 +35,7 @@ class LoginFragment : Fragment() {
         // Inflate the layout for this fragment
         loginBinding=DataBindingUtil.inflate(inflater,R.layout.fragment_login,container,false)
 
-        loginViewmodel=ViewModelProvider(requireActivity(),RegisterViewmodelfactory(UserRepository(api))).get(LoginViewmodel::class.java)
+        loginViewmodel=ViewModelProvider(requireActivity(),UserViewmodelfactory(UserRepository(api))).get(LoginViewmodel::class.java)
 
         loginBinding.loginViewModel=loginViewmodel
         return loginBinding.root

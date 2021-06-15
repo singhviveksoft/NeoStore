@@ -5,20 +5,22 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.neosoftassignmentproject.R
 import com.example.neosoftassignmentproject.databinding.FragmentRegisterBinding
 import com.example.neosoftassignmentproject.constants.interfaces.Api
 import com.example.neosoftassignmentproject.repository.UserRepository
-import com.example.neosoftassignmentproject.viewModelFactory.RegisterViewmodelfactory
+import com.example.neosoftassignmentproject.viewModelFactory.UserViewmodelfactory
 import com.example.neosoftassignmentproject.viewmodels.RegisterViewmodel
 
 class RegisterFragment : Fragment() {
 private lateinit var binding:FragmentRegisterBinding
 private lateinit var registerViewmodel: RegisterViewmodel
 private val api:Api=Api.getInstance()
+    private  var FLAG:Boolean=false
 
 
     override fun onCreateView(
@@ -27,7 +29,7 @@ private val api:Api=Api.getInstance()
     ): View? {
         // Inflate the layout for this fragment
         binding=DataBindingUtil.inflate(inflater,R.layout.fragment_register, container, false)
-        registerViewmodel=ViewModelProvider(requireActivity(),RegisterViewmodelfactory(
+        registerViewmodel=ViewModelProvider(requireActivity(),UserViewmodelfactory(
             UserRepository(api)
         )).get(RegisterViewmodel::class.java)
         binding.registerViewmodel=registerViewmodel
@@ -58,7 +60,7 @@ private val api:Api=Api.getInstance()
 //         //  }
             val p=   binding.mobEdt.text.toString().toLong()
               val q=  p.toLong()
-                Toast.makeText(requireContext(), "$p", Toast.LENGTH_SHORT).show()
+              //  Toast.makeText(requireContext(), "$p", Toast.LENGTH_SHORT).show()
                 registerViewmodel.phoneNo.value=q
 
                 registerViewmodel.userRegister()
@@ -66,5 +68,15 @@ private val api:Api=Api.getInstance()
         //    }
 
         }
+
+
+        registerViewmodel._userRegr?.observe(viewLifecycleOwner, Observer {
+            if (it==null){
+                FLAG=false
+            }else {
+                FLAG = true
+                findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+            }
+        })
     }
 }

@@ -1,6 +1,6 @@
 package com.example.neosoftassignmentproject.model
 
-data class editCart(
+data class EditCart(
     val `data`: Boolean,
     val message: String,
     val status: Int,

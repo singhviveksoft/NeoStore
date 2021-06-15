@@ -23,4 +23,11 @@
     <style name="Theme.NeosoftAssignmentProject.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.NeosoftAssignmentProject.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+    <style name="ProductRatingBar" parent="Widget.AppCompat.RatingBar">
+        <item name="android:progressDrawable">@drawable/custom_rating_bar</item>
+        <item name="android:minHeight">45dip</item>
+        <item name="android:maxHeight">45dip</item>
+    </style>
 </resources>

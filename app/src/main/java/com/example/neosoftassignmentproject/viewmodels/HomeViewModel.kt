@@ -5,15 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.neosoftassignmentproject.model.GetUserData
-import com.example.neosoftassignmentproject.model.ProductCategory
+import com.example.neosoftassignmentproject.model.GetProductCategiryData
 import com.example.neosoftassignmentproject.repository.UserRepository
 import kotlinx.coroutines.launch
-import retrofit2.Response
 
 class HomeViewModel(val repository: UserRepository):ViewModel() {
-    private val product=MutableLiveData<ArrayList<ProductCategory>>()
-    val getProduct:LiveData<ArrayList<ProductCategory>>
+    private val product=MutableLiveData<GetProductCategiryData>()
+    val getProduct:LiveData<GetProductCategiryData>
     get() = product
 
 
@@ -21,8 +19,9 @@ class HomeViewModel(val repository: UserRepository):ViewModel() {
         viewModelScope.launch {
             try {
                 val response=repository.getUser(access_token)
-                product.value.add(response)response!!
-            }catch (ex:Exception){
+               product.value=response
+              //  val value= response.data.product_categories[1]
+           }catch (ex:Exception){
                 Log.i("HomeViewModel","${ex.message.toString()}")
 
             }

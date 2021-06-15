@@ -11,16 +11,33 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_margin="45px"
+        >
 
         <ImageView
             android:id="@+id/product_img"
-            android:layout_width="0dp"
-            android:layout_height="200dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:scaleType="fitXY"
             loadImg="@{model.icon_image}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:textColor="@color/white"
+            android:padding="8dp"
+            android:textSize="69px"
+            android:fontFamily="@font/gotham_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{model.name}"
+
+            app:layout_constraintStart_toStartOf="@+id/product_img"
+            app:layout_constraintTop_toTopOf="@+id/product_img" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -40,6 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/user_name"
+                android:inputType="textEmailAddress"
                 android:text="@={loginViewModel.email}"
                 android:textSize="54px" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -55,7 +56,6 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:errorEnabled="true"
             app:boxStrokeColor="@color/grey"
-            app:endIconMode="clear_text"
             android:textColorHint="@color/white"
             app:startIconDrawable="@drawable/password_icon"
             app:startIconTint="@color/white"

@@ -1,6 +1,6 @@
 package com.example.neosoftassignmentproject.model
 
 data class GetProductDetail(
-    val `data`: Data,
+    val `data`: ProductDetailData,
     val status: Int
 )

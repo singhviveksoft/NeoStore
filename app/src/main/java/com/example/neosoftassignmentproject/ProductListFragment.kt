@@ -6,26 +6,69 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.neosoftassignmentproject.adapter.ProductListAdapter
+import com.example.neosoftassignmentproject.constants.interfaces.Api
 import com.example.neosoftassignmentproject.databinding.FragmentProductListBinding
+import com.example.neosoftassignmentproject.model.ProductCategory
+import com.example.neosoftassignmentproject.model.ProductListData
+import com.example.neosoftassignmentproject.repository.UserRepository
+import com.example.neosoftassignmentproject.viewModelFactory.UserViewmodelfactory
+import com.example.neosoftassignmentproject.viewmodels.ProductListViewModel
 
 
-class ProductListFragment : Fragment() {
-    private lateinit var binding: FragmentProductListBinding
+class ProductListFragment : Fragment(),ProductListAdapter.clickItem {
+
+
+private lateinit var binding: FragmentProductListBinding
     val args:ProductListFragmentArgs by navArgs()
-
+    private lateinit var viewModel: ProductListViewModel
+    private val api=Api.getInstance()
+    private lateinit var adapter:ProductListAdapter
+    private val arrayList=ArrayList<ProductListData>()
+    private var name:String?=null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         binding= FragmentProductListBinding.inflate(inflater, container, false)
+        viewModel=ViewModelProvider(requireActivity(),UserViewmodelfactory(UserRepository(api))).get(ProductListViewModel::class.java)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val product_id=args.productId
-        Toast.makeText(requireContext(), "$product_id", Toast.LENGTH_SHORT).show()
+       val product_category_id=args.productCategoryId
+        name=args.name
+      //  Toast.makeText(requireContext(), "$product_id", Toast.LENGTH_SHORT).show()
+
+        viewModel.getProductList(product_category_id)
+        adapter= ProductListAdapter(this)
+        binding.rvProduct.adapter=adapter
+        viewModel.ProductList.observe(viewLifecycleOwner, Observer {
+          arrayList.clear()
+            arrayList.addAll(it.data)
+            adapter.addProduct(arrayList)
+        })
+        Toast.makeText(requireContext(), "onViewCreated", Toast.LENGTH_SHORT).show()
+
+
     }
+
+
+    override fun onResume() {
+        super.onResume()
+        Toast.makeText(requireContext(), "onResume", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onClick(productlist: ProductListData) {
+   val productId=productlist.id.toString()
+    val action=ProductListFragmentDirections.actionProductListFragmentToProductDetailFragment(productId,name!!)
+  findNavController().navigate(action)
+}
+
 }

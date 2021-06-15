@@ -1,6 +1,6 @@
 package com.example.neosoftassignmentproject.model
 
-data class DataX(
+data class ProductListData(
     val cost: Int,
     val created: String,
     val description: String,

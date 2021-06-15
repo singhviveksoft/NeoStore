@@ -7,18 +7,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:elevation="20dp"
+    android:id="@+id/cardView_cart_pop_up"
     app:cardCornerRadius="20dp"
+
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/productImage"
             android:layout_width="772px"
             android:layout_height="534px"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -29,7 +32,7 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/textView8"
+            android:id="@+id/ProductNameText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="100px"
@@ -39,36 +42,56 @@
             android:textAlignment="center"
             android:textColor="#2c2b2b"
             android:textSize="75px"
-            app:layout_constraintBottom_toTopOf="@+id/imageView3"
+            app:layout_constraintBottom_toTopOf="@+id/productImage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <RatingBar
-            android:id="@+id/ratingBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:numStars="5"
-            android:stepSize="1"
-            android:progressTint="#ffba00"
-            android:progressBackgroundTint="@color/grey"
-            app:layout_constraintBottom_toTopOf="@+id/button2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3"
-            app:layout_constraintVertical_bias="0.31" />
 
         <Button
-            android:id="@+id/button2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:id="@+id/submitBtn"
+            android:layout_width="595px"
+            android:layout_height="142px"
             android:layout_marginStart="80dp"
             android:layout_marginEnd="80dp"
-            android:text="Button"
+            android:text="Submit"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/enter_qty"
+            android:textSize="60px"
+            android:fontFamily="@font/gotham_book"
+            android:textColor="#2c2b2b"
+            app:layout_constraintBottom_toTopOf="@+id/submitBtn"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+            app:layout_constraintTop_toBottomOf="@+id/productImage"
+            app:layout_constraintVertical_bias="0.23000002" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="wrap_content"
+            android:minHeight="129px"
+            android:minWidth="336px"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginTop="39dp"
+            android:layout_marginBottom="31dp"
+            app:layout_constraintBottom_toTopOf="@+id/submitBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView11">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/quatity_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

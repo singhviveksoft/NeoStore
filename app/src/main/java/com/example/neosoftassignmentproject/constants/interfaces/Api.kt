@@ -1,12 +1,10 @@
 package com.example.neosoftassignmentproject.constants.interfaces
 
 
-import com.example.neosoftassignmentproject.model.ProductCategory
-import com.example.neosoftassignmentproject.model.UserLoginData
-import com.example.neosoftassignmentproject.model.UserRegisterData
+import android.icu.util.TimeUnit
+import com.example.neosoftassignmentproject.model.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
@@ -27,6 +25,12 @@ interface Api {
             @Field("phone_no")phone_no: Long
     ): UserRegisterData
 
+
+
+
+
+
+
     @FormUrlEncoded
     @POST("users/login")
     suspend fun userLogin(
@@ -35,17 +39,31 @@ interface Api {
     ):UserLoginData
 
 
+
+
+
+
+
+
+
     @GET("users/getUserData")
     suspend fun getUser(
         @Header("access_token")access_token:String
-    ):Array<ProductCategory>?
+    ): GetProductCategiryData
+
+
+
+
+
+
+
 
 
 
   @GET("products/getList")
   suspend fun getProduct(
       @Query("product_category_id")product_category_id:String
-  )
+  ): GetProductList
 
 
 
@@ -54,6 +72,87 @@ interface Api {
 
 
 
+
+
+    @GET("products/getDetail")
+    suspend fun getProductDetail(
+        @Query("product_id")product_id:String
+    ):GetProductDetail
+
+
+
+
+
+
+    @FormUrlEncoded
+    @POST("products/setRating")
+    suspend fun addRating(
+    @Field("product_id")product_id:String,
+    @Field("rating")rating:Number
+    ):GetRating
+
+
+
+
+
+
+
+    @FormUrlEncoded
+    @POST("addToCart")
+    suspend fun addToCart(
+        @Header("access_token")access_token:String,
+        @Field("product_id")product_id:Number,
+        @Field("quantity")quantity:Number
+    ):AddToCart
+
+
+
+
+
+
+    @GET("cart")
+    suspend fun myCart(
+        @Header("access_token")access_token:String
+    ):MyCard
+
+
+
+    @FormUrlEncoded
+   @POST("deleteCart")
+   suspend fun deleteCartItem(
+       @Header("access_token")access_token:String,
+       @Field("product_id")product_id:Number
+   ):Deleteitem
+
+
+@FormUrlEncoded
+   @POST("editCart")
+   suspend fun changeQuantity(
+       @Header("access_token")access_token:String,
+       @Field("product_id")product_id:Number,
+       @Field("quantity")quantity:Number
+   ):EditCart
+
+
+   @FormUrlEncoded
+   @POST("order")
+   suspend fun placeOrder(
+       @Header("access_token")access_token:String,
+       @Field("address")address:String
+   ):PlaceOrder
+
+
+    @GET("orderList")
+    suspend fun myOder(
+        @Header("access_token")access_token:String
+    ):MyOrder
+
+
+    @GET("orderDetail")
+    suspend fun orderDetail(
+        @Header("access_token")access_token:String,
+        @Query("order_id")order_id:Number
+    ):OrderDetail
 
 
 
@@ -62,6 +161,11 @@ interface Api {
         this.level=HttpLoggingInterceptor.Level.BODY
     }
         val client=OkHttpClient.Builder().apply {
+
+
+            this.connectTimeout(50,java.util.concurrent.TimeUnit.SECONDS)
+            this.readTimeout(50,java.util.concurrent.TimeUnit.SECONDS)
+            this.writeTimeout(50,java.util.concurrent.TimeUnit.SECONDS)
             this.addInterceptor(interceptor)
         }.build()
 

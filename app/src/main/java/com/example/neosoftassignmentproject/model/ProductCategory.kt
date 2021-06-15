@@ -1,5 +1,7 @@
 package com.example.neosoftassignmentproject.model
 
+import java.io.Serializable
+
 data class ProductCategory(
     val created: String,
     val icon_image: String,

@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-
-</selector>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<item
+    android:id="@+id/background"
+    android:drawable="@drawable/uncheck_rating"></item>
+    <item
+        android:id="@+id/secondaryProgress"
+        android:drawable="@drawable/uncheck_rating"></item>
+    <item
+        android:id="@+id/progress"
+        android:drawable="@drawable/check_rating"></item>
+</layer-list>

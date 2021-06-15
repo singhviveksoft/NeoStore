@@ -13,8 +13,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.viewpager2.widget.ViewPager2
@@ -24,13 +22,13 @@ import com.example.neosoftassignmentproject.constants.UserPreferences
 import com.example.neosoftassignmentproject.constants.interfaces.Api
 
 import com.example.neosoftassignmentproject.databinding.FragmentHomeBinding
+import com.example.neosoftassignmentproject.model.ProductCategory
 import com.example.neosoftassignmentproject.repository.UserRepository
-import com.example.neosoftassignmentproject.viewModelFactory.RegisterViewmodelfactory
+import com.example.neosoftassignmentproject.viewModelFactory.UserViewmodelfactory
 import com.example.neosoftassignmentproject.viewmodels.HomeViewModel
-import androidx.navigation.fragment.NavHostFragment.findNavController as findNavController1
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(),UserProductAdapter.clickItem{
     private lateinit var binding:FragmentHomeBinding
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -38,7 +36,7 @@ class HomeFragment : Fragment() {
  private   val imageArrayList=ArrayList<Drawable>()
     private val indicatorsArraylist=ArrayList<TextView>()
     private val api= Api.getInstance()
-
+    private val arrayList=ArrayList<ProductCategory>()
 
 private lateinit var viewModel: HomeViewModel
 private lateinit var userProductAdapter: UserProductAdapter
@@ -49,8 +47,8 @@ private lateinit var userProductAdapter: UserProductAdapter
         // Inflate the layout for this fragment
         binding= FragmentHomeBinding.inflate(inflater, container, false)
         slideImageAdapter= SlideImageAdapter()
-        userProductAdapter= UserProductAdapter()
-        viewModel=ViewModelProvider(requireActivity(),RegisterViewmodelfactory(UserRepository(api))).get(HomeViewModel::class.java)
+        userProductAdapter= UserProductAdapter(this)
+        viewModel=ViewModelProvider(requireActivity(),UserViewmodelfactory(UserRepository(api))).get(HomeViewModel::class.java)
 
 
         binding.rvProduct.adapter=userProductAdapter
@@ -66,15 +64,19 @@ private lateinit var userProductAdapter: UserProductAdapter
         imageArrayList.add(requireContext().resources.getDrawable(R.drawable.slider_img4))
       //  addIndicator()
 
-        UserPreferences(requireContext()).getUserId.asLiveData().observe(viewLifecycleOwner){
-            viewModel.getProduct(it)
+        UserPreferences(requireContext()).getAccessToken.asLiveData().observe(viewLifecycleOwner){
+            viewModel.getProduct(it)   // api call
 
         }
-
+//observer
         viewModel.getProduct.observe(viewLifecycleOwner, Observer {
+            arrayList.clear()
+
            // if (it){
-                userProductAdapter.addProduct(it)
-          //  }
+            arrayList.addAll(it.data.product_categories)
+           // for (i in arrayList.indices){
+                userProductAdapter.addProduct(arrayList)
+           // }
         })
 
 
@@ -91,12 +93,6 @@ private lateinit var userProductAdapter: UserProductAdapter
 
 
 
-        binding.tableImg.setOnClickListener {
-        val action=HomeFragmentDirections.actionHomeFragmentToProductListFragment("table")
-
-
-           findNavController().navigate(action)
-        }
 
 
     }
@@ -111,4 +107,21 @@ private lateinit var userProductAdapter: UserProductAdapter
             binding.linearLayout3.addView(indicatorsArraylist[i])
         }
     }
+
+    override fun onClick(productCategory: ProductCategory) {
+
+        val product_category_id=productCategory.id.toString()
+        val name=productCategory.name.toString()
+
+        val action=HomeFragmentDirections.actionHomeFragmentToProductListFragment(product_category_id,name)
+
+
+        findNavController().navigate(action)
+
+
+
+
+        // Toast.makeText(requireContext(), "${product_id.toString()}", Toast.LENGTH_SHORT).show()
+    }
+
 }

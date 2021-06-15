@@ -1,4 +1,9 @@
 package com.example.neosoftassignmentproject
 
-class MyAppliction {
+import android.app.Application
+
+class MyAppliction:Application() {
+    override fun onCreate() {
+        super.onCreate()
+    }
 }

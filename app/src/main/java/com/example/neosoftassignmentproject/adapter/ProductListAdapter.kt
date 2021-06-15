@@ -3,53 +3,55 @@ package com.example.neosoftassignmentproject.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.neosoftassignmentproject.databinding.ProductListItemBinding
 import com.example.neosoftassignmentproject.databinding.UserProductBinding
 import com.example.neosoftassignmentproject.model.ProductCategory
+import com.example.neosoftassignmentproject.model.ProductListData
 
-class UserProductAdapter(val click:clickItem):RecyclerView.Adapter<UserProductAdapter.UserProductViewHolder>() {
-   val userProductList= arrayListOf<ProductCategory>()
+class ProductListAdapter(val onClick:clickItem):RecyclerView.Adapter<ProductListAdapter.ProductViewHolder>() {
+   val ProductList= arrayListOf<ProductListData>()
 
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserProductViewHolder {
-        val view=UserProductBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-        return UserProductViewHolder(view,click)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
+        val view=ProductListItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        return ProductViewHolder(view,onClick)
     }
 
-    override fun onBindViewHolder(holder: UserProductViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
 
-        holder.bind(userProductList[position])
+        holder.bind(ProductList[position])
 
     }
 
     override fun getItemCount(): Int {
-     return userProductList.size
+     return ProductList.size
     }
 
-    fun addProduct(list: List<ProductCategory>){
-       this.userProductList.clear()
-        this.userProductList.addAll(list)
+    fun addProduct(list: List<ProductListData>){
+       this.ProductList.clear()
+        this.ProductList.addAll(list)
         notifyDataSetChanged()
 
     }
 
 
-  inner  class UserProductViewHolder(val binding: UserProductBinding,val item:clickItem) :RecyclerView.ViewHolder(binding.root){
+  inner  class ProductViewHolder(val binding: ProductListItemBinding,val onClick:clickItem) :RecyclerView.ViewHolder(binding.root){
 
-        fun bind(productCategory: ProductCategory) {
-            binding.model=productCategory
+        fun bind(productList: ProductListData) {
+            binding.model=productList
         }
 
         init {
             itemView.setOnClickListener {
-                item.onClick(userProductList[adapterPosition] )
+                onClick.onClick(ProductList[adapterPosition] )
             }
 
         }
 
     }
         interface clickItem{
-            fun onClick(productCategory: ProductCategory)
+            fun onClick(productlist: ProductListData)
         }
 
 }

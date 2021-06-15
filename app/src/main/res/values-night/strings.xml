@@ -7,4 +7,23 @@
     <string name="store_locator">Store Locator</string>
     <string name="my_order">My Order</string>
     <string name="logout">Logout</string>
+    <string name="description">Description</string>
+    <string name="enter_qty">Enter Qty</string>
+
+
+
+    <string-array name="quatity_dropdown">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+
+
+
+    </string-array>
+
 </resources>

@@ -1,26 +1,24 @@
 package com.example.neosoftassignmentproject.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.neosoftassignmentproject.databinding.UserProductBinding
-import com.example.neosoftassignmentproject.model.GetUserData
 import com.example.neosoftassignmentproject.model.ProductCategory
 
-class UserProductAdapter:RecyclerView.Adapter<UserProductAdapter.UserProductViewHolder>() {
+class UserProductAdapter(val click:clickItem):RecyclerView.Adapter<UserProductAdapter.UserProductViewHolder>() {
    val userProductList= arrayListOf<ProductCategory>()
 
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserProductViewHolder {
         val view=UserProductBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-        return UserProductViewHolder(view)
+        return UserProductViewHolder(view,click)
     }
 
     override fun onBindViewHolder(holder: UserProductViewHolder, position: Int) {
 
-
+        holder.bind(userProductList[position])
 
     }
 
@@ -29,17 +27,29 @@ class UserProductAdapter:RecyclerView.Adapter<UserProductAdapter.UserProductView
     }
 
     fun addProduct(list: List<ProductCategory>){
+       this.userProductList.clear()
         this.userProductList.addAll(list)
+        notifyDataSetChanged()
 
     }
 
 
-    class UserProductViewHolder(binding: UserProductBinding) :RecyclerView.ViewHolder(binding.root){
+  inner  class UserProductViewHolder(val binding: UserProductBinding,val item:clickItem) :RecyclerView.ViewHolder(binding.root){
+
+        fun bind(productCategory: ProductCategory) {
+            binding.model=productCategory
+        }
+
         init {
+            itemView.setOnClickListener {
+                item.onClick(userProductList[adapterPosition] )
+            }
 
         }
 
     }
-
+        interface clickItem{
+            fun onClick(productCategory: ProductCategory)
+        }
 
 }
