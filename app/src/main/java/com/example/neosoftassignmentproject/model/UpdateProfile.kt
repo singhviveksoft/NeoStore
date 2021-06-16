@@ -1,6 +1,12 @@
 package com.example.neosoftassignmentproject.model
 
-data class UserData(
+data class UpdateProfile(
+    val `data`: UpdateData,
+    val message: String,
+    val status: Int,
+    val user_msg: String
+)
+data class UpdateData(
     val access_token: String,
     val country_id: Any,
     val created: String,

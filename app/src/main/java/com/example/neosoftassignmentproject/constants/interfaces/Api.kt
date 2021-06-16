@@ -155,6 +155,33 @@ interface Api {
     ):OrderDetail
 
 
+    @FormUrlEncoded
+    @POST("users/forgot")
+    suspend fun forgotPwd(
+
+        @Field("email")email:String
+    ):ForgotPassword
+
+    @FormUrlEncoded
+   @POST("users/update")
+   suspend fun updateProfile(
+       @Header("access_token")access_token:String,
+       @Field("first_name")first_name:String,
+       @Field("last_name")last_name:String,
+       @Field("email")email:String,
+       @Field("dob")dob:String,
+       @Field("phone_no")phone_no:String,
+       @Field("profile_pic")profile_pic:String
+   ):UpdateProfile
+
+
+
+
+
+
+
+
+
 
     companion object{
     val interceptor=HttpLoggingInterceptor().apply {

@@ -6,25 +6,29 @@
     android:title="@string/my_cart"></item>
 
     <item
-        android:id="@+id/tablesFragment"
+        android:id="@+id/tableFragment"
         android:icon="@drawable/table"
         android:title="@string/tables"></item>
 
 
     <item
+        android:id="@+id/sofaFragment"
         android:icon="@drawable/sofa"
         android:title="@string/sofas"></item>
 
     <item
+        android:id="@+id/chairsFragment"
         android:icon="@drawable/chair"
         android:title="@string/chairs"></item>
 
     <item
+        android:id="@+id/BedsFragment"
         android:icon="@drawable/cupboard"
-        android:title="@string/cupboards"></item>
+        android:title="Beds"></item>
 
 
     <item
+        android:id="@+id/myAccountFragment"
         android:icon="@drawable/user_icon"
         android:title="@string/my_account"></item>
 
@@ -38,6 +42,7 @@
         android:title="@string/my_order"></item>
 
     <item
+        android:id="@+id/logoutDialogFragment"
         android:icon="@drawable/logout_icon"
         android:title="@string/logout"></item>
 

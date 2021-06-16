@@ -30,6 +30,23 @@ private lateinit var binding: FragmentProductListBinding
     private lateinit var adapter:ProductListAdapter
     private val arrayList=ArrayList<ProductListData>()
     private var name:String?=null
+
+ companion object{
+     var prod_catgry_id="0"
+     var prod_catg_name="0"
+
+     fun Prod_catgry_id(_prod_catgry_id:String,_prod_catg_name:String){
+         prod_catgry_id =_prod_catgry_id
+         prod_catg_name =_prod_catg_name
+
+     }
+
+ }
+
+
+
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,9 +61,17 @@ private lateinit var binding: FragmentProductListBinding
         super.onViewCreated(view, savedInstanceState)
        val product_category_id=args.productCategoryId
         name=args.name
-      //  Toast.makeText(requireContext(), "$product_id", Toast.LENGTH_SHORT).show()
-
         viewModel.getProductList(product_category_id)
+      //  Toast.makeText(requireContext(), "$product_id", Toast.LENGTH_SHORT).show()
+      /* if (prod_catgry_id=="0"&&prod_catg_name=="0") {
+           viewModel.getProductList(product_category_id)
+       }
+        else{
+           viewModel.getProductList(prod_catgry_id)
+           name=prod_catg_name
+
+       }*/
+
         adapter= ProductListAdapter(this)
         binding.rvProduct.adapter=adapter
         viewModel.ProductList.observe(viewLifecycleOwner, Observer {

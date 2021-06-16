@@ -6,8 +6,14 @@ import coil.load
 
 @BindingAdapter("loadImg")
 fun ImageView.LoadImg(str:String){
-    this.load(str){
-        crossfade(true)
-        crossfade(2000)
-    }
+
+  try {
+      this.load(str){
+          crossfade(true)
+          crossfade(2000)
+      }
+
+  }catch (ex:Exception){
+
+  }
 }

@@ -15,11 +15,6 @@
             app:destination="@id/addAddressFragment" />
     </fragment>
     <fragment
-        android:id="@+id/tablesFragment"
-        android:name="com.example.neosoftassignmentproject.TablesFragment"
-        android:label="fragment_tables"
-        tools:layout="@layout/fragment_tables" />
-    <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.neosoftassignmentproject.HomeFragment"
         android:label="NeoStore" >
@@ -34,13 +29,15 @@
         tools:layout="@layout/fragment_product_list" >
         <argument
             android:name="product_category_id"
-            app:argType="string" />
+            app:argType="string"
+            android:defaultValue=""/>
         <action
             android:id="@+id/action_productListFragment_to_productDetailFragment"
             app:destination="@id/productDetailFragment" />
         <argument
             android:name="name"
-            app:argType="string" />
+            app:argType="string"
+            android:defaultValue=""/>
 <!--        <argument android:name="productDetail" />-->
     </fragment>
     <fragment
@@ -91,4 +88,59 @@
             android:name="order_id"
             app:argType="integer" />
     </fragment>
+    <dialog
+        android:id="@+id/logoutDialogFragment"
+        android:name="com.example.neosoftassignmentproject.LogoutDialogFragment"
+        android:label="fragment_logout_dialog"
+        tools:layout="@layout/fragment_logout_dialog" >
+        <action
+            android:id="@+id/action_logoutDialogFragment_to_loginFragment2"
+            app:destination="@id/loginFragment2"
+            app:popUpTo="@id/loginFragment2"
+            app:popUpToInclusive="true" />
+    </dialog>
+    <fragment
+        android:id="@+id/loginFragment2"
+        android:name="com.example.neosoftassignmentproject.views.LoginFragment"
+        android:label="LoginFragment" />
+    <fragment
+        android:id="@+id/tableFragment"
+        android:name="com.example.neosoftassignmentproject.TableFragment"
+        android:label="fragment_table"
+        tools:layout="@layout/fragment_table" >
+        <action
+            android:id="@+id/action_tableFragment_to_productDetailFragment"
+            app:destination="@id/productDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/BedsFragment"
+        android:name="com.example.neosoftassignmentproject.BedsFragment"
+        android:label="fragment_beds"
+        tools:layout="@layout/fragment_beds" >
+        <action
+            android:id="@+id/action_BedsFragment_to_productDetailFragment"
+            app:destination="@id/productDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chairsFragment"
+        android:name="com.example.neosoftassignmentproject.ChairsFragment"
+        android:label="fragment_chairs"
+        tools:layout="@layout/fragment_chairs" >
+        <action
+            android:id="@+id/action_chairsFragment_to_productDetailFragment"
+            app:destination="@id/productDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/sofaFragment"
+        android:name="com.example.neosoftassignmentproject.SofaFragment"
+        android:label="fragment_sofa"
+        tools:layout="@layout/fragment_sofa" >
+        <action
+            android:id="@+id/action_sofaFragment_to_productDetailFragment"
+            app:destination="@id/productDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myAccountFragment"
+        android:name="com.example.neosoftassignmentproject.MyAccountFragment"
+        android:label="MyAccountFragment" />
 </navigation>

@@ -40,6 +40,10 @@ class UserViewmodelfactory(val repository: UserRepository):ViewModelProvider.Fac
             return OrderDetailViewModel(repository) as T
         }
 
+        else if (modelClass.isAssignableFrom(ForgotPasswordViewmodel::class.java)){
+            return ForgotPasswordViewmodel(repository) as T
+        }
+
 
         throw IllegalArgumentException("Viewmodelfactory")
     }

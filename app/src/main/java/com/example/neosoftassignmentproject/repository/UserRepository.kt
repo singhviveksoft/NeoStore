@@ -39,5 +39,15 @@ class UserRepository(val api:Api) {
     suspend fun orderDetail(access_token:String,order_id:Number)=api.orderDetail(access_token,order_id)
 
 
+    suspend fun forgotPwd(email:String)=api.forgotPwd(email)
+
+    suspend fun updateProfile(
+        access_token:String,
+        first_name:String,
+        last_name:String,
+        email:String,
+        dob:String,
+        phone_no:String,
+        profile_pic:String)  =api.updateProfile(access_token,first_name,last_name,email,dob,phone_no,profile_pic)
 
 }

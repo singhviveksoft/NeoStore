@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.neosoftassignmentproject.HomeActivity
+import com.example.neosoftassignmentproject.HomeScreenActivity
 import com.example.neosoftassignmentproject.R
 import com.example.neosoftassignmentproject.constants.UserPreferences
 import com.example.neosoftassignmentproject.constants.interfaces.Api
@@ -45,6 +45,8 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
+
+
             loginViewmodel._userLogin?.observe(requireActivity(), Observer {
             if (it==null){
                 FLAG=false
@@ -53,14 +55,16 @@ class LoginFragment : Fragment() {
                 storeUserId(it.data.access_token)
              //   findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
 
-              val intent=Intent(requireContext(),HomeActivity::class.java)
+              val intent=Intent(requireContext(), HomeScreenActivity::class.java)
                 startActivity(intent)
 
             }
         })
 
 
-
+        loginBinding.forgotPwdTxt.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_forgotPasswordFragment)
+        }
 
 
         loginBinding.addAccountImg.setOnClickListener {

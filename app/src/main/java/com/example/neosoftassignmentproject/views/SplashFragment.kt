@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
-import com.example.neosoftassignmentproject.HomeActivity
+import com.example.neosoftassignmentproject.HomeScreenActivity
 import com.example.neosoftassignmentproject.R
 import com.example.neosoftassignmentproject.constants.UserPreferences
 
@@ -41,7 +41,7 @@ class SplashFragment : Fragment() {
                     findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
 
                 } else {
-                    val intent = Intent(requireContext(), HomeActivity::class.java)
+                    val intent = Intent(requireActivity(), HomeScreenActivity::class.java)
                     startActivity(intent)
                     activity?.finish()
                 }

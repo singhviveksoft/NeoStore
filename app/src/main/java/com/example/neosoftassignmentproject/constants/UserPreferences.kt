@@ -44,7 +44,11 @@ class UserPreferences(context: Context) {
     }
 
 
-
+ suspend fun clearData(){
+    mDataStore.edit {
+        it.clear()
+    }
+}
 
 
 
