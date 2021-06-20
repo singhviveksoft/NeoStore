@@ -31,12 +31,20 @@ private lateinit var binding:FragmentLogoutDialogBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.yesBtn.setOnClickListener {
-            CoroutineScope(Dispatchers.Main).launch {
-                UserPreferences(requireContext()).clearData()
-               // findNavController().navigate(R.id.action_logoutDialogFragment_to_loginFragment2)
-                activity?.finish()
-            }
-        }
+           // lifecycleScope.launch {
+                val job= CoroutineScope(Dispatchers.Main).launch {
+                    UserPreferences(requireContext()).clearData()
+                    dismiss()
+                   // findNavController().navigate(R.id.action_logoutDialogFragment_to_loginFragment2)
+                    activity?.finish()
+                }
+            //    job.join()
+           // }
 
+    }
+
+        binding.noBtn.setOnClickListener {
+            dismiss()
+        }
     }
 }

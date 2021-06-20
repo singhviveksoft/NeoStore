@@ -42,8 +42,8 @@ class AddressAdapter(val click:clickItem):RecyclerView.Adapter<AddressAdapter.Us
      return addressArraylist.size
     }
 
-    fun addProduct(list: ArrayList<AddAddress>){
-
+    fun addProduct(list: List<AddAddress>){
+        this.addressArraylist.clear()
         this.addressArraylist.addAll(list)
         notifyDataSetChanged()
 
@@ -51,28 +51,23 @@ class AddressAdapter(val click:clickItem):RecyclerView.Adapter<AddressAdapter.Us
 
 
   inner  class UserProductViewHolder(val binding: AddressItemBinding,val item:clickItem) :RecyclerView.ViewHolder(binding.root) {
-
+// on bind
       fun bind(address: AddAddress) {
           binding.model = address
 
          if (adapterPosition==selectedPosition) {
              binding.radioButton.isChecked = true
              binding.relativeLt.setBackgroundResource(R.drawable.selected_address_bg)
-
-
          }
           else{
              binding.radioButton.isChecked = false
              binding.relativeLt.setBackgroundResource(R.drawable.un_selected_address_bg)
-
-
-         }
-
+          }
       }
 
       init {
 
-          binding.radioButton.setOnClickListener {
+        /**/  binding.radioButton.setOnClickListener {
               selectedPosition = adapterPosition
              notifyDataSetChanged()
               val address=binding.addressTxt.text.toString()
@@ -85,9 +80,12 @@ class AddressAdapter(val click:clickItem):RecyclerView.Adapter<AddressAdapter.Us
           }
 
 
+
+
           binding.removeImg.setOnClickListener {
-              val position=adapterPosition
-                 addressArraylist.removeAt(position)
+            //  val position=adapterPosition
+              item.onClick(addressArraylist[adapterPosition])
+               //  addressArraylist.removeAt(position)
               notifyDataSetChanged()
           }
 
@@ -106,6 +104,7 @@ class AddressAdapter(val click:clickItem):RecyclerView.Adapter<AddressAdapter.Us
 
 
   }
+
 
 
 

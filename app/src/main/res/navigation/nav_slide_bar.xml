@@ -142,5 +142,18 @@
     <fragment
         android:id="@+id/myAccountFragment"
         android:name="com.example.neosoftassignmentproject.MyAccountFragment"
-        android:label="MyAccountFragment" />
+        android:label="MyAccountFragment" >
+        <action
+            android:id="@+id/action_myAccountFragment_to_changePwdFragment"
+            app:destination="@id/changePwdFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/changePwdFragment"
+        android:name="com.example.neosoftassignmentproject.ChangePwdFragment"
+        android:label="ChangePwdFragment" />
+    <fragment
+        android:id="@+id/storeLocatorFragment"
+        android:name="com.example.neosoftassignmentproject.StoreLocatorFragment"
+        android:label="fragment_store_locator"
+        tools:layout="@layout/fragment_store_locator" />
 </navigation>

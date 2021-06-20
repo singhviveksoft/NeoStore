@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
+import androidx.navigation.fragment.findNavController
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.example.neosoftassignmentproject.constants.UserPreferences
@@ -89,7 +90,7 @@ private val api= Api.getInstance()
             Toast.makeText(requireContext(), "${it.user_msg}", Toast.LENGTH_SHORT).show()
         })
 
-
+// btn click
         binding.editProfileBtn.setOnClickListener {
             val email=binding.emailEditText.text.toString()
             val phone_no=binding.mobileEditText.text.toString()
@@ -97,12 +98,17 @@ private val api= Api.getInstance()
             val firstName=binding.firstNameTxt.text.toString()
             val lastName=binding.lastNameTxt.text.toString()
             UserPreferences(requireContext()).getAccessToken.asLiveData().observe(requireActivity()){
-                viewModel.updateProfile(it,firstName,lastName,email,dob,phone_no,_image!!)
+                viewModel.updateProfile(it,firstName,lastName,email,dob,phone_no,_image!!)   // api call
             }
 
         }
 
 
+        binding.resetPwdBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_myAccountFragment_to_changePwdFragment)
+        }
+
+// user image permission btn click
         binding.profileImg.setOnClickListener {
             requestPermission()
         }

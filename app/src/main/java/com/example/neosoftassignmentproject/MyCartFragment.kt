@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
@@ -14,12 +15,14 @@ import androidx.navigation.fragment.findNavController
 import com.example.neosoftassignmentproject.adapter.MyCartAdapter
 import com.example.neosoftassignmentproject.constants.UserPreferences
 import com.example.neosoftassignmentproject.constants.interfaces.Api
+import com.example.neosoftassignmentproject.constants.utils.ApiResult
 import com.example.neosoftassignmentproject.databinding.FragmentMyCartBinding
 import com.example.neosoftassignmentproject.model.CartData
 import com.example.neosoftassignmentproject.model.Product
 import com.example.neosoftassignmentproject.repository.UserRepository
 import com.example.neosoftassignmentproject.viewModelFactory.UserViewmodelfactory
 import com.example.neosoftassignmentproject.viewmodels.MyCartViewModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 
 
@@ -38,6 +41,7 @@ private val api= Api.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        viewModel=ViewModelProvider(this,UserViewmodelfactory(UserRepository(api))).get(MyCartViewModel::class.java)
 
 
     }
@@ -50,9 +54,11 @@ private val api= Api.getInstance()
     ): View? {
         // Inflate the layout for this fragment
         binding= FragmentMyCartBinding.inflate(inflater, container, false)
-        viewModel=ViewModelProvider(requireActivity(),UserViewmodelfactory(UserRepository(api))).get(MyCartViewModel::class.java)
 
         myAdapter=MyCartAdapter(this)
+        binding.totalAmtTxt.isVisible=false
+        binding.totalTxt.isVisible=false
+        binding.orderBtn.isVisible=false
 
         return binding.root
     }
@@ -60,6 +66,7 @@ private val api= Api.getInstance()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.mycartRv.adapter=myAdapter
 
         UserPreferences(requireContext()).getAccessToken.asLiveData().observe(viewLifecycleOwner){
@@ -75,6 +82,9 @@ private val api= Api.getInstance()
 
         viewModel._cart.observe(viewLifecycleOwner, Observer {
           if (it!=null&&it.data!==null) {
+              binding.totalAmtTxt.isVisible=true
+              binding.totalTxt.isVisible=true
+              binding.orderBtn.isVisible=true
               arrayList.clear()
              val  list = it.data
               val total = it.total.toString()
@@ -89,7 +99,7 @@ private val api= Api.getInstance()
               arrayList.clear()
 
               myAdapter.addProduct(arrayList, emptylist)
-              binding.totalAmtTxt.text="0.0"
+
 
           }
 
@@ -110,15 +120,42 @@ private val api= Api.getInstance()
 
 
         //live data observe for delete status
-/*
         viewModel._iteamDelete.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-              //  viewModel.getMyCart(accessToken)
+                viewModel._apiResult.observe(viewLifecycleOwner, Observer {
 
-                Toast.makeText(requireContext(), "${it.user_msg.toString()}", Toast.LENGTH_SHORT).show()
+                    when(it){
+                        is ApiResult.Success->{
+                            Snackbar.make(
+                                binding.root,
+                                "${it.msg}",
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                            //  binding.progressBar.isVisible = false
+                        }
+                        is ApiResult.Error->{
+                            Snackbar.make(
+                                binding.root,
+                                "${it.message}",
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                            //  binding.progressBar.isVisible = false
+                        }
+                        is ApiResult.Loading->{
+                            Snackbar.make(
+                                binding.root,
+                                "Loading",
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                            //  binding.progressBar.isVisible = false
+                        }
+
+                    }
+
+                })
+
             }
         })
-*/
 
 /*
         viewModel._changeQuantity.observe(viewLifecycleOwner, Observer {

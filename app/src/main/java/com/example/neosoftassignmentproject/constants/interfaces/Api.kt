@@ -175,9 +175,14 @@ interface Api {
    ):UpdateProfile
 
 
-
-
-
+    @FormUrlEncoded
+    @POST("users/change")
+    suspend fun changePwd(
+        @Header("access_token")access_token:String,
+        @Field("old_password")old_password:String,
+        @Field("password")password:String,
+        @Field("confirm_password")confirm_password:String
+    ):ChangePwd
 
 
 

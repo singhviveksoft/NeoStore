@@ -79,7 +79,7 @@ private lateinit var binding: FragmentProductListBinding
             arrayList.addAll(it.data)
             adapter.addProduct(arrayList)
         })
-        Toast.makeText(requireContext(), "onViewCreated", Toast.LENGTH_SHORT).show()
+      //  Toast.makeText(requireContext(), "onViewCreated", Toast.LENGTH_SHORT).show()
 
 
     }
@@ -87,7 +87,7 @@ private lateinit var binding: FragmentProductListBinding
 
     override fun onResume() {
         super.onResume()
-        Toast.makeText(requireContext(), "onResume", Toast.LENGTH_SHORT).show()
+     //   Toast.makeText(requireContext(), "onResume", Toast.LENGTH_SHORT).show()
     }
 
     override fun onClick(productlist: ProductListData) {

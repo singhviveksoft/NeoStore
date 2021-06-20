@@ -22,6 +22,7 @@ val arrayList= arrayListOf<OrderDetailData>()
     }
 
     fun addOrderDetail(list: List<OrderDetailData>){
+        arrayList.clear()
         arrayList.addAll(list)
         notifyDataSetChanged()
     }

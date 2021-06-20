@@ -13,10 +13,12 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.example.neosoftassignmentproject.constants.interfaces.Api
+import com.example.neosoftassignmentproject.constants.utils.InternetConnection
 import com.example.neosoftassignmentproject.repository.UserRepository
 import com.example.neosoftassignmentproject.viewModelFactory.UserViewmodelfactory
 import com.example.neosoftassignmentproject.viewmodels.HomeViewModel
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_home_screen.*
 
 class HomeScreenActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener{
@@ -57,6 +59,15 @@ class HomeScreenActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
         })
 
         navigationView.setNavigationItemSelectedListener(this)
+
+        InternetConnection(this).observe(this, Observer {isNetworkAvailable ->
+            Snackbar.make(
+                drawerLayout,
+                "Check your network connection",
+                Snackbar.LENGTH_LONG
+            ).show()
+
+        })
 
 
     }

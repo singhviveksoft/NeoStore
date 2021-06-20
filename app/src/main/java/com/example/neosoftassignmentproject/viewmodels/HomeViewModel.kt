@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.neosoftassignmentproject.constants.UserPreferences
+import com.example.neosoftassignmentproject.model.ChangePwd
 import com.example.neosoftassignmentproject.model.GetProductCategiryData
 import com.example.neosoftassignmentproject.model.UpdateProfile
 import com.example.neosoftassignmentproject.repository.UserRepository
@@ -19,7 +20,15 @@ class HomeViewModel(val repository: UserRepository):ViewModel() {
     private val updateProfile=MutableLiveData<UpdateProfile>()
     val _updateProfile:LiveData<UpdateProfile>
         get() = updateProfile
+
+
+    private val changePwd=MutableLiveData<ChangePwd>()
+    val _changePwd:LiveData<ChangePwd>
+        get() = changePwd
+
+
      val _access_token=MutableLiveData<String>()
+
 
     fun getProduct(access_token:String){
         viewModelScope.launch {
@@ -33,6 +42,9 @@ class HomeViewModel(val repository: UserRepository):ViewModel() {
             }
         }
     }
+
+
+
 
     fun updateProfile(access_token:String,
                       first_name:String,
@@ -54,6 +66,26 @@ class HomeViewModel(val repository: UserRepository):ViewModel() {
         }
 
     }
+
+
+     fun changePwd(access_token:String,
+                          old_password:String,
+                          password:String,
+                          confirm_password:String){
+         viewModelScope.launch {
+
+
+        try {
+            val response=repository.changePwd(access_token,old_password,password,password)
+
+            changePwd.value=response
+        }catch (ex:Exception){
+            Log.i("HomeViewModel","${ex.message.toString()}")
+
+        }
+
+         }
+     }
 
 
 }

@@ -189,13 +189,13 @@
             android:layout_marginBottom="1dp"
 
             android:text="edit profile"
-            app:layout_constraintBottom_toTopOf="@+id/button4"
+            app:layout_constraintBottom_toTopOf="@+id/resetPwd_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout14" />
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/resetPwd_btn"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_marginTop="1dp"

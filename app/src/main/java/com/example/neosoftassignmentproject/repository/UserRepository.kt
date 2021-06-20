@@ -50,4 +50,14 @@ class UserRepository(val api:Api) {
         phone_no:String,
         profile_pic:String)  =api.updateProfile(access_token,first_name,last_name,email,dob,phone_no,profile_pic)
 
+
+
+
+
+    suspend fun changePwd(access_token:String,
+                          old_password:String,
+                          password:String,
+                          confirm_password:String)  =api.changePwd(access_token,old_password,password,confirm_password)
+
+
 }

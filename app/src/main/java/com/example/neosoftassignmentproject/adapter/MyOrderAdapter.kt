@@ -24,6 +24,8 @@ class MyOrderAdapter(val item:onItemClick):RecyclerView.Adapter<MyOrderAdapter.V
     }
 
     fun addOrder(list: List<MyOrderData>){
+        this.arrayList.clear()
+
         this.arrayList.addAll(list)
         notifyDataSetChanged()
     }

@@ -29,9 +29,7 @@ class UserViewmodelfactory(val repository: UserRepository):ViewModelProvider.Fac
         else if (modelClass.isAssignableFrom(MyCartViewModel::class.java)){
             return MyCartViewModel(repository) as T
         }
-        else if (modelClass.isAssignableFrom(AddAdressViewModel::class.java)){
-            return AddAdressViewModel(repository) as T
-        }
+
 
         else if (modelClass.isAssignableFrom(MyOrderListViewModel::class.java)){
             return MyOrderListViewModel(repository) as T

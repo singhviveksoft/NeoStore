@@ -1,58 +1,52 @@
 package com.example.neosoftassignmentproject
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.datastore.preferences.protobuf.Api
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asLiveData
-import androidx.navigation.fragment.findNavController
 import com.example.neosoftassignmentproject.adapter.AddressAdapter
-import com.example.neosoftassignmentproject.constants.UserPreferences
-import com.example.neosoftassignmentproject.constants.interfaces.Api
 import com.example.neosoftassignmentproject.constants.utils.ApiResult
-import com.example.neosoftassignmentproject.databinding.FragmentAddresslistBinding
+import com.example.neosoftassignmentproject.databinding.FragmentStoreLocatorBinding
 import com.example.neosoftassignmentproject.db.DataBase
 import com.example.neosoftassignmentproject.model.AddAddress
 import com.example.neosoftassignmentproject.repository.AddressRepository
-import com.example.neosoftassignmentproject.repository.UserRepository
 import com.example.neosoftassignmentproject.viewModelFactory.DBViewModelFactory
-import com.example.neosoftassignmentproject.viewModelFactory.UserViewmodelfactory
 import com.example.neosoftassignmentproject.viewmodels.AddAdressViewModel
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.*
 
 
-class AddresslistFragment : Fragment(),AddressAdapter.clickItem {
-    private lateinit var binding:FragmentAddresslistBinding
-    private lateinit var viewModel:AddAdressViewModel
-    private lateinit var myAdapter:AddressAdapter
+class StoreLocatorFragment : Fragment(),AddressAdapter.clickItem {
+private lateinit var binding:FragmentStoreLocatorBinding
+private lateinit var viewModel:AddAdressViewModel
+private val api=com.example.neosoftassignmentproject.constants.interfaces.Api.getInstance()
     private lateinit var db:DataBase
-    private val api= Api.getInstance()
-    val arrayList=ArrayList<AddAddress>()
-    var accessToken:String?=null
-    var address:String?=null
+    private lateinit var myAdapter:AddressAdapter
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        db= DataBase.getInstance(requireContext())
+        viewModel=ViewModelProvider(this,DBViewModelFactory(AddressRepository(api,db))).get(AddAdressViewModel::class.java)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding= FragmentAddresslistBinding.inflate(inflater, container, false)
-        db=DataBase.getInstance(requireContext())
-        viewModel=ViewModelProvider(this,DBViewModelFactory(AddressRepository(api,db))).get(AddAdressViewModel::class.java)
-
+        binding= FragmentStoreLocatorBinding.inflate(inflater, container, false)
         myAdapter= AddressAdapter(this)
-        binding.rvAddress.adapter=myAdapter
+        binding.rvStoreLocator.adapter=myAdapter
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         viewModel._apiResult.observe(viewLifecycleOwner, Observer {
             when(it){
@@ -102,49 +96,14 @@ class AddresslistFragment : Fragment(),AddressAdapter.clickItem {
 
 
 
-
-
-        UserPreferences(requireContext()).getAccessToken.asLiveData().observe(viewLifecycleOwner){
-            accessToken=it
-        }
-        UserPreferences(requireContext()).getAddress.asLiveData().observe(viewLifecycleOwner){
-            address=it
-        }
-
-
-
         viewModel.getAddressList.observe(viewLifecycleOwner, Observer {
-        Log.i("addressList","${it.toString()}")
-
 
             myAdapter.addProduct(it)
-
         })
-
-
-        binding.placeOrderBtn.setOnClickListener {
-    CoroutineScope(Dispatchers.Main).launch {
-        viewModel.placeOrder(accessToken!!,address!!)
-
-            findNavController().navigate(R.id.action_addresslistFragment_to_myOrderFragment)
-     //   Toast.makeText(requireContext(), "runBlocking", Toast.LENGTH_SHORT).show()
-
-
-    }
-
-            //  findNavController().navigate(R.id.action_addresslistFragment_to_myOrderFragment)
-        }
-
-
-/*
-        viewModel._placeOrder.observe(viewLifecycleOwner, Observer {
-            Toast.makeText(requireContext(), "${it.user_msg}", Toast.LENGTH_SHORT).show()
-        })
-*/
-
     }
 
     override fun onClick(address: AddAddress) {
-  viewModel.deleteAddress(address)
+        viewModel.deleteAddress(address)
     }
+
 }
