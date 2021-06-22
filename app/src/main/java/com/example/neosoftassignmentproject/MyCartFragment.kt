@@ -2,20 +2,21 @@ package com.example.neosoftassignmentproject
 
 import android.app.AlertDialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.neosoftassignmentproject.adapter.MyCartAdapter
 import com.example.neosoftassignmentproject.constants.UserPreferences
 import com.example.neosoftassignmentproject.constants.interfaces.Api
 import com.example.neosoftassignmentproject.constants.utils.ApiResult
+import com.example.neosoftassignmentproject.constants.utils.InternetConnection
 import com.example.neosoftassignmentproject.databinding.FragmentMyCartBinding
 import com.example.neosoftassignmentproject.model.CartData
 import com.example.neosoftassignmentproject.model.Product
@@ -42,7 +43,9 @@ private val api= Api.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel=ViewModelProvider(this,UserViewmodelfactory(UserRepository(api))).get(MyCartViewModel::class.java)
+        viewModel=ViewModelProvider(requireActivity(), UserViewmodelfactory(UserRepository(api))).get(
+            MyCartViewModel::class.java
+        )
 
 
     }
@@ -61,6 +64,7 @@ private val api= Api.getInstance()
         binding.totalTxt.isVisible=false
         binding.orderBtn.isVisible=false
 
+
         return binding.root
     }
 
@@ -69,6 +73,12 @@ private val api= Api.getInstance()
         super.onViewCreated(view, savedInstanceState)
 
         binding.mycartRv.adapter=myAdapter
+        binding.mycartRv.addItemDecoration(
+            DividerItemDecoration(
+                binding.mycartRv.getContext(),
+                DividerItemDecoration.VERTICAL
+            )
+        )
 
         viewModel.isDataAvailable.observe(viewLifecycleOwner){
             status=it
@@ -77,43 +87,20 @@ private val api= Api.getInstance()
 
 
 
-        UserPreferences(requireContext()).getAccessToken.asLiveData().observe(viewLifecycleOwner){
-           //api call
-            access_Token=it
-            viewModel.accessToken.value=access_Token
-            viewModel.getMyCart(access_Token)
+        InternetConnection(requireContext()).observe(viewLifecycleOwner, Observer { isNetworkAvailable ->
+            if (!isNetworkAvailable) {
+                Snackbar.make(
+                    binding.root,
+                    "no internet connection",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }else{
+                UserPreferences(requireContext()).getAccessToken.asLiveData().observe(viewLifecycleOwner){
+                    //api call
+                    access_Token=it
+                    viewModel.accessToken.value=access_Token
+                    viewModel.getMyCart(access_Token)
 
-        }
-
-
-        viewModel._apiResult.observe(viewLifecycleOwner, Observer {
-            if (status==true)
-            when (it) {
-                is ApiResult.Success -> {
-                    Snackbar.make(
-                        binding.root,
-                        "${it.msg}",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                    viewModel.isDataAvailable.value = null
-
-                    //  binding.progressBar.isVisible = false
-                }
-                is ApiResult.Error -> {
-                    Snackbar.make(
-                        binding.root,
-                        "${it.message}",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                    //  binding.progressBar.isVisible = false
-                }
-                is ApiResult.Loading -> {
-                    Snackbar.make(
-                        binding.root,
-                        "Loading",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                    //  binding.progressBar.isVisible = false
                 }
 
             }
@@ -122,33 +109,69 @@ private val api= Api.getInstance()
 
 
 
+        viewModel._apiResult.observe(viewLifecycleOwner, Observer {
+            if (status == true)
+                when (it) {
+                    is ApiResult.Success -> {
+                        Snackbar.make(
+                            binding.root,
+                            "${it.msg}",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                        viewModel.isDataAvailable.value = null
+
+                        //  binding.progressBar.isVisible = false
+                    }
+                    is ApiResult.Error -> {
+                        Snackbar.make(
+                            binding.root,
+                            "${it.message}",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                        //  binding.progressBar.isVisible = false
+                    }
+                    is ApiResult.Loading -> {
+                        Snackbar.make(
+                            binding.root,
+                            "Loading",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                        //  binding.progressBar.isVisible = false
+                    }
+
+                }
+
+        })
+
+
+
 
         viewModel._cart.observe(viewLifecycleOwner, Observer {
 
-                if (it != null && it.data !== null) {
-                    binding.totalAmtTxt.isVisible = true
-                    binding.totalTxt.isVisible = true
-                    binding.orderBtn.isVisible = true
-                    arrayList.clear()
-                    val list = it.data
-                    val total = it.total.toString()
-                    binding.totalAmtTxt.text = total
+            if (it != null && it.data !== null) {
+                binding.totalAmtTxt.isVisible = true
+                binding.totalTxt.isVisible = true
+                binding.orderBtn.isVisible = true
+                arrayList.clear()
+                val list = it.data
+                val total = it.total.toString()
+                binding.totalAmtTxt.text = total
 
-                    for (item in list) {
-                        arrayList.add(item.product)
-
-                    }
-                    myAdapter.addProduct(arrayList, list)
-                } else {
-                    arrayList.clear()
-                    binding.totalAmtTxt.isVisible=false
-                    binding.totalTxt.isVisible=false
-                    binding.orderBtn.isVisible=false
-
-                    myAdapter.addProduct(arrayList, emptylist)
-
+                for (item in list) {
+                    arrayList.add(item.product)
 
                 }
+                myAdapter.addProduct(arrayList, list)
+            } else {
+                arrayList.clear()
+                binding.totalAmtTxt.isVisible = false
+                binding.totalTxt.isVisible = false
+                binding.orderBtn.isVisible = false
+
+                myAdapter.addProduct(arrayList, emptylist)
+
+
+            }
 
         })
 
@@ -226,13 +249,13 @@ private val api= Api.getInstance()
 
 
 
-    override fun onClick(mycartList: CartData,status:String,quantity:Number) {
+    override fun onClick(mycartList: CartData, status: String, quantity: Number) {
       if (status.equals("delete")) {
           deleteItem(mycartList.product_id)
      //     viewModel.getMyCart(it)
 
       }else{
-          viewModel.changeQuantity(access_Token,mycartList.product_id,quantity)
+          viewModel.changeQuantity(access_Token, mycartList.product_id, quantity)
 
       //   UserPreferences(requireContext()).getAccessToken.asLiveData().observe(viewLifecycleOwner){
 /*
@@ -266,14 +289,14 @@ private val api= Api.getInstance()
         val dialog=AlertDialog.Builder(requireContext())
         dialog.setTitle("Delete Item")
         dialog.setMessage("Are you sure you want to delete your product from my cart")
-        dialog.setPositiveButton("YES"){dialog, which->
+        dialog.setPositiveButton("YES"){ dialog, which->
             //api call
             UserPreferences(requireContext()).getAccessToken.asLiveData().observe(viewLifecycleOwner){
-            viewModel.deleteCartItem(it,productId)
+            viewModel.deleteCartItem(it, productId)
             }
 
         }
-        dialog.setNegativeButton("No"){dialog,which->
+        dialog.setNegativeButton("No"){ dialog, which->
             dialog.dismiss()
         }
 

@@ -72,7 +72,6 @@ class HomeScreenActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
 
         navigationView.setNavigationItemSelectedListener(this)
 
-/*
         InternetConnection(this).observe(this, Observer {isNetworkAvailable ->
            if (!isNetworkAvailable)
             Snackbar.make(
@@ -82,7 +81,7 @@ class HomeScreenActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
             ).show()
 
         })
-*/
+
 
 
     }

@@ -32,7 +32,9 @@
             android:layout_marginTop="20dp"
             android:text="@{model.name,default=Productname}"
             android:textColor="#1c1c1c"
-            android:textSize="70px"
+            android:textSize="20dp"
+            android:maxLines="1"
+            android:ellipsize="end"
             app:layout_constraintEnd_toStartOf="@+id/delete_img"
             app:layout_constraintStart_toEndOf="@+id/imageView3"
             app:layout_constraintTop_toTopOf="parent" />
