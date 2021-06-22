@@ -34,20 +34,22 @@
 
         <EditText
             android:id="@+id/editTextTextPersonName"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
+            android:padding="15dp"
             android:background="@drawable/btn_bg"
             android:layout_height="wrap_content"
             android:minHeight="120dp"
             android:imeOptions="actionNext"
             android:textColor="#333333"
             android:gravity="start"
+
             android:fontFamily="@font/gotham_book"
             android:layout_marginStart="30dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="30dp"
-            android:ems="10"
-            android:inputType="text"
-            android:text="@={viewModel.addres}"
+
+            android:inputType="textMultiLine"
+            android:text="@={viewModel.addres, default=address}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView12" />
@@ -69,6 +71,7 @@
         <EditText
             android:id="@+id/editTextTextPersonName2"
             android:layout_width="0dp"
+            android:padding="15dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginTop="20dp"
@@ -118,6 +121,8 @@
             android:layout_height="50dp"
             android:layout_marginStart="30dp"
             android:layout_marginTop="15dp"
+            android:padding="15dp"
+
             android:background="@drawable/btn_bg"
             android:text="@={viewModel.city}"
             android:imeOptions="actionNext"
@@ -135,6 +140,7 @@
             android:layout_marginTop="15dp"
             android:background="@drawable/btn_bg"
             android:ems="10"
+            android:padding="15dp"
             android:text="@={viewModel.state}"
             android:imeOptions="actionNext"
             android:fontFamily="@font/gotham_book"
@@ -164,6 +170,8 @@
             android:layout_marginTop="15dp"
             android:background="@drawable/btn_bg"
             android:ems="10"
+            android:padding="15dp"
+            android:maxLength="6"
             android:text="@={viewModel.zip_code}"
             android:imeOptions="actionNext"
             android:inputType="number"
@@ -190,6 +198,7 @@
             android:layout_marginTop="12dp"
             android:background="@drawable/btn_bg"
             android:ems="10"
+            android:padding="15dp"
             android:text="@={viewModel.country}"
             android:imeOptions="actionDone"
             android:fontFamily="@font/gotham_book"

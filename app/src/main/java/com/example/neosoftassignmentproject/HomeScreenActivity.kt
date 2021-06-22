@@ -6,15 +6,21 @@ import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.example.neosoftassignmentproject.constants.interfaces.Api
 import com.example.neosoftassignmentproject.constants.utils.InternetConnection
+import com.example.neosoftassignmentproject.db.DataBase
+import com.example.neosoftassignmentproject.repository.CategoryRepository
 import com.example.neosoftassignmentproject.repository.UserRepository
+import com.example.neosoftassignmentproject.viewModelFactory.CateyDBViewModelFactory
 import com.example.neosoftassignmentproject.viewModelFactory.UserViewmodelfactory
 import com.example.neosoftassignmentproject.viewmodels.HomeViewModel
 import com.google.android.material.navigation.NavigationView
@@ -27,11 +33,12 @@ class HomeScreenActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
     private val api = Api.getInstance()
     var product_catgy_id:String?=null
     var product_name:String?=null
-    var   name :String="singh"
+    private lateinit var db: DataBase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_screen)
-        viewModel=ViewModelProvider(this,UserViewmodelfactory(UserRepository(api))).get(HomeViewModel::class.java)
+        db= DataBase.getInstance(this)
+        viewModel=ViewModelProvider(this, CateyDBViewModelFactory(CategoryRepository(api,db))).get(HomeViewModel::class.java)
         setSupportActionBar(findViewById(R.id.toolbar))
         val navHostFragment =
 
@@ -51,23 +58,31 @@ class HomeScreenActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
         viewModel.getProduct.observe(this, Observer {
             product_catgy_id = it.data.product_categories[0].id.toString()
             product_name = it.data.product_categories[0].name.toString()
-
+            val imgUrl=it.data.user_data.profile_pic
             val email = it.data.user_data.email
             val name = it.data.user_data.first_name.plus(it.data.user_data.last_name)
                textViewEmail.text = email.toString()
                 textViewName.text = name.toString()
+            imgvw.load(imgUrl){
+                crossfade(true)
+                crossfade(2000)
+                transformations(CircleCropTransformation())
+            }
         })
 
         navigationView.setNavigationItemSelectedListener(this)
 
+/*
         InternetConnection(this).observe(this, Observer {isNetworkAvailable ->
+           if (!isNetworkAvailable)
             Snackbar.make(
                 drawerLayout,
-                "Check your network connection",
-                Snackbar.LENGTH_LONG
+                "no internet connection",
+                Snackbar.LENGTH_SHORT
             ).show()
 
         })
+*/
 
 
     }

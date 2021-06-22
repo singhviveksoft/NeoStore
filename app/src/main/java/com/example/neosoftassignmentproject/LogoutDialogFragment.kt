@@ -35,6 +35,7 @@ private lateinit var binding:FragmentLogoutDialogBinding
                 val job= CoroutineScope(Dispatchers.Main).launch {
                     UserPreferences(requireContext()).clearData()
                     dismiss()
+                    
                    // findNavController().navigate(R.id.action_logoutDialogFragment_to_loginFragment2)
                     activity?.finish()
                 }

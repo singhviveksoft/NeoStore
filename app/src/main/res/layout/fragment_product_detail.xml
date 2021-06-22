@@ -163,9 +163,9 @@
 
                     <ImageView
                         android:id="@+id/prductImage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="80dp"
+                        android:layout_width="150dp"
+                        android:layout_height="100dp"
+                        android:layout_marginTop="60dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -194,9 +194,16 @@
                         app:layout_constraintTop_toTopOf="@+id/productPriceText" />
 
                     <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_image"
                         android:layout_width="0dp"
-                        android:layout_height="207px"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginTop="20px"
+                        android:layout_marginEnd="10dp"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="10dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintBottom_toTopOf="@+id/textView10"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/prductImage" />

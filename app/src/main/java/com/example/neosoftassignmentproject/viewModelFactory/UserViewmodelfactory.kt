@@ -16,9 +16,7 @@ class UserViewmodelfactory(val repository: UserRepository):ViewModelProvider.Fac
         else  if (modelClass.isAssignableFrom(LoginViewmodel::class.java)){
             return LoginViewmodel(repository) as T
         }
-        else  if (modelClass.isAssignableFrom(HomeViewModel::class.java)){
-            return HomeViewModel(repository) as T
-        }
+
         else if (modelClass.isAssignableFrom(ProductListViewModel::class.java)){
             return ProductListViewModel(repository) as T
         }

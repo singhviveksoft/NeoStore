@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:text="@={registerViewmodel.fName}"
                 android:inputType="text"
-
+                    android:id="@+id/user_firstName_edttxt"
                 android:hint="@string/fName" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -72,6 +72,8 @@
                 android:layout_height="wrap_content"
                 android:text="@={registerViewmodel.email}"
                 android:inputType="textEmailAddress"
+                android:id="@+id/email_edttxt"
+
                 android:hint="@string/email" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -102,6 +104,7 @@
                 android:layout_height="wrap_content"
                 android:text="@={registerViewmodel.lname}"
                 android:inputType="text"
+                android:id="@+id/user_lastName_edttxt"
 
                  />
         </com.google.android.material.textfield.TextInputLayout>
@@ -130,6 +133,7 @@
                 android:layout_height="wrap_content"
                 android:text="@={registerViewmodel.confPwd}"
                 android:inputType="textPassword"
+                android:id="@+id/conf_pwd_edttxt"
                 android:hint="@string/conf_Pwd" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -157,6 +161,7 @@
                 android:layout_height="wrap_content"
                 android:text="@={registerViewmodel.pwd}"
                 android:inputType="textPassword"
+                android:id="@+id/pwd_edttxt"
                 android:hint="@string/Pwd" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -251,6 +256,7 @@
                 android:inputType="number"
                 android:maxLength="10"
                 android:digits="01234566789"
+
 
                 android:hint="@string/mobile" />
         </com.google.android.material.textfield.TextInputLayout>

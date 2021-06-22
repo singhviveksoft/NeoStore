@@ -50,6 +50,12 @@ class UserPreferences(context: Context) {
     }
 }
 
+   suspend fun removeAddress(){
+        mDataStore.edit {
+            it.remove(ADDRESS)
+        }
+    }
+
 
 
 }

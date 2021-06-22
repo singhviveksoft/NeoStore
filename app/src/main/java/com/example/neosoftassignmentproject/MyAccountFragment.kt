@@ -22,7 +22,10 @@ import coil.transform.CircleCropTransformation
 import com.example.neosoftassignmentproject.constants.UserPreferences
 import com.example.neosoftassignmentproject.constants.interfaces.Api
 import com.example.neosoftassignmentproject.databinding.FragmentMyaccountBinding
+import com.example.neosoftassignmentproject.db.DataBase
+import com.example.neosoftassignmentproject.repository.CategoryRepository
 import com.example.neosoftassignmentproject.repository.UserRepository
+import com.example.neosoftassignmentproject.viewModelFactory.CateyDBViewModelFactory
 import com.example.neosoftassignmentproject.viewModelFactory.UserViewmodelfactory
 import com.example.neosoftassignmentproject.viewmodels.HomeViewModel
 import com.vmadalin.easypermissions.EasyPermissions
@@ -35,7 +38,7 @@ class MyAccountFragment : Fragment(),EasyPermissions.PermissionCallbacks {
 private lateinit var binding:FragmentMyaccountBinding
 private lateinit var viewModel:HomeViewModel
 private val api= Api.getInstance()
-
+    private lateinit var db: DataBase
     private var imageUri: Uri? = null
     private var  bitmap: Bitmap? = null
     private var image:String?="data:image/jpg;base64,"
@@ -58,7 +61,8 @@ private val api= Api.getInstance()
     ): View? {
         // Inflate the layout for this fragment
         binding= FragmentMyaccountBinding.inflate(inflater, container, false)
-        viewModel=ViewModelProvider(requireActivity(),UserViewmodelfactory(UserRepository(api))).get(HomeViewModel::class.java)
+        db= DataBase.getInstance(requireContext())
+        viewModel=ViewModelProvider(this, CateyDBViewModelFactory(CategoryRepository(api,db))).get(HomeViewModel::class.java)
           return binding.root
     }
 
@@ -86,7 +90,7 @@ private val api= Api.getInstance()
 
 
 //oserver
-        viewModel._updateProfile.observe(requireActivity(), Observer {
+        viewModel._updateProfile.observe(viewLifecycleOwner, Observer {
             Toast.makeText(requireContext(), "${it.user_msg}", Toast.LENGTH_SHORT).show()
         })
 

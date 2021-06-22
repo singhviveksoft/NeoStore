@@ -11,6 +11,14 @@ import kotlinx.coroutines.launch
 
 class MyCartViewModel(val repository: UserRepository):ViewModel() {
 
+
+
+    var isDataAvailable=MutableLiveData<Boolean?>()
+    val _isDataAvailable:LiveData<Boolean?>
+        get() = isDataAvailable
+
+
+
     private val apiResult=MutableLiveData<ApiResult>()
     val _apiResult:LiveData<ApiResult>
         get() = apiResult
@@ -41,16 +49,23 @@ class MyCartViewModel(val repository: UserRepository):ViewModel() {
 //my cart list item
     fun getMyCart(access_token:String){
         viewModelScope.launch {
-          //  apiResult.value=ApiResult.Loading
+            apiResult.value=ApiResult.Loading
             try {
                 val response=repository.myCart(access_token)
-               // apiResult.value=ApiResult.Success(response.status.toString())
-               cart.value=response
-                Log.i("HomeViewModel","${cart.value.toString()}")
+                isDataAvailable.value=true
+                if (response.data==null) {
+                    apiResult.value = ApiResult.Success("empty cart  ")
+                    cart.value = response
 
+                }else {
+                    apiResult.value = ApiResult.Success("cart item  ")
+
+                    cart.value = response
+                    Log.i("HomeViewModel", "${cart.value.toString()}")
+                }
                 //  val value= response.data.product_categories[1]
             }catch (ex:Exception){
-               // apiResult.value=ApiResult.Error(ex.message.toString())
+                apiResult.value=ApiResult.Error(ex.message.toString())
 
                 Log.i("HomeViewModel","${ex.message.toString()}")
 
@@ -64,6 +79,8 @@ class MyCartViewModel(val repository: UserRepository):ViewModel() {
             apiResult.value=ApiResult.Loading
             try {
                 val response=repository.deleteCartItem(access_token,product_id)
+                isDataAvailable.value=true
+
                 apiResult.value=ApiResult.Success(response.user_msg)
 
                 iteamDelete.value=response

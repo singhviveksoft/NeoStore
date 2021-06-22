@@ -40,6 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/user_name"
+                android:id="@+id/email_edttxt"
                 android:inputType="textEmailAddress"
                 android:text="@={loginViewModel.email}"
                 android:textSize="54px" />
@@ -68,6 +69,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/Pwd"
+                android:id="@+id/pwd_edttxt"
                 android:text="@={loginViewModel.pwd}"
                 android:inputType="textPassword"
                 android:textSize="54px" />

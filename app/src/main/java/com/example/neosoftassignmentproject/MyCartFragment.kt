@@ -34,6 +34,7 @@ var access_Token:String="0"
 var arrayList=ArrayList<Product>()
     var emptylist= emptyList<CartData>()
 private val api= Api.getInstance()
+    var status:Boolean?=null
 
 
 
@@ -69,6 +70,13 @@ private val api= Api.getInstance()
 
         binding.mycartRv.adapter=myAdapter
 
+        viewModel.isDataAvailable.observe(viewLifecycleOwner){
+            status=it
+        }
+
+
+
+
         UserPreferences(requireContext()).getAccessToken.asLiveData().observe(viewLifecycleOwner){
            //api call
             access_Token=it
@@ -78,30 +86,69 @@ private val api= Api.getInstance()
         }
 
 
+        viewModel._apiResult.observe(viewLifecycleOwner, Observer {
+            if (status==true)
+            when (it) {
+                is ApiResult.Success -> {
+                    Snackbar.make(
+                        binding.root,
+                        "${it.msg}",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                    viewModel.isDataAvailable.value = null
+
+                    //  binding.progressBar.isVisible = false
+                }
+                is ApiResult.Error -> {
+                    Snackbar.make(
+                        binding.root,
+                        "${it.message}",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                    //  binding.progressBar.isVisible = false
+                }
+                is ApiResult.Loading -> {
+                    Snackbar.make(
+                        binding.root,
+                        "Loading",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                    //  binding.progressBar.isVisible = false
+                }
+
+            }
+
+        })
+
+
 
 
         viewModel._cart.observe(viewLifecycleOwner, Observer {
-          if (it!=null&&it.data!==null) {
-              binding.totalAmtTxt.isVisible=true
-              binding.totalTxt.isVisible=true
-              binding.orderBtn.isVisible=true
-              arrayList.clear()
-             val  list = it.data
-              val total = it.total.toString()
-              binding.totalAmtTxt.text = total
 
-              for (item in list) {
-                  arrayList.add(item.product)
+                if (it != null && it.data !== null) {
+                    binding.totalAmtTxt.isVisible = true
+                    binding.totalTxt.isVisible = true
+                    binding.orderBtn.isVisible = true
+                    arrayList.clear()
+                    val list = it.data
+                    val total = it.total.toString()
+                    binding.totalAmtTxt.text = total
 
-              }
-              myAdapter.addProduct(arrayList, list)
-          }else{
-              arrayList.clear()
+                    for (item in list) {
+                        arrayList.add(item.product)
 
-              myAdapter.addProduct(arrayList, emptylist)
+                    }
+                    myAdapter.addProduct(arrayList, list)
+                } else {
+                    arrayList.clear()
+                    binding.totalAmtTxt.isVisible=false
+                    binding.totalTxt.isVisible=false
+                    binding.orderBtn.isVisible=false
+
+                    myAdapter.addProduct(arrayList, emptylist)
 
 
-          }
+                }
 
         })
 
@@ -120,42 +167,48 @@ private val api= Api.getInstance()
 
 
         //live data observe for delete status
+/*
         viewModel._iteamDelete.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                viewModel._apiResult.observe(viewLifecycleOwner, Observer {
+            if (status == true) {
+                if (it != null) {
+                    viewModel._apiResult.observe(viewLifecycleOwner, Observer {
 
-                    when(it){
-                        is ApiResult.Success->{
-                            Snackbar.make(
-                                binding.root,
-                                "${it.msg}",
-                                Snackbar.LENGTH_LONG
-                            ).show()
-                            //  binding.progressBar.isVisible = false
+                        when (it) {
+                            is ApiResult.Success -> {
+                                Snackbar.make(
+                                    binding.root,
+                                    "${it.msg}",
+                                    Snackbar.LENGTH_SHORT
+                                ).show()
+                                viewModel.isDataAvailable.value = null
+
+                                //  binding.progressBar.isVisible = false
+                            }
+                            is ApiResult.Error -> {
+                                Snackbar.make(
+                                    binding.root,
+                                    "${it.message}",
+                                    Snackbar.LENGTH_SHORT
+                                ).show()
+                                //  binding.progressBar.isVisible = false
+                            }
+                            is ApiResult.Loading -> {
+                                Snackbar.make(
+                                    binding.root,
+                                    "Loading",
+                                    Snackbar.LENGTH_SHORT
+                                ).show()
+                                //  binding.progressBar.isVisible = false
+                            }
+
                         }
-                        is ApiResult.Error->{
-                            Snackbar.make(
-                                binding.root,
-                                "${it.message}",
-                                Snackbar.LENGTH_LONG
-                            ).show()
-                            //  binding.progressBar.isVisible = false
-                        }
-                        is ApiResult.Loading->{
-                            Snackbar.make(
-                                binding.root,
-                                "Loading",
-                                Snackbar.LENGTH_LONG
-                            ).show()
-                            //  binding.progressBar.isVisible = false
-                        }
 
-                    }
+                    })
 
-                })
-
+                }
             }
         })
+*/
 
 /*
         viewModel._changeQuantity.observe(viewLifecycleOwner, Observer {
@@ -230,6 +283,6 @@ private val api= Api.getInstance()
 
     override fun onDestroy() {
         super.onDestroy()
-        Toast.makeText(requireContext(), "onDestroy", Toast.LENGTH_SHORT).show()
+      //  Toast.makeText(requireContext(), "onDestroy", Toast.LENGTH_SHORT).show()
     }
 }

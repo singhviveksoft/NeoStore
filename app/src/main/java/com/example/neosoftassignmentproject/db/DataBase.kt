@@ -5,10 +5,12 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.neosoftassignmentproject.model.AddAddress
+import com.example.neosoftassignmentproject.model.ProductCategory
 
-@Database(entities = [AddAddress::class],version = 1)
+@Database(entities = [AddAddress::class,ProductCategory::class],version = 1)
 abstract class DataBase:RoomDatabase() {
 abstract val addresDao:AddressDao
+abstract val productCategoryDao:CategoryDao
 
 
     companion object {

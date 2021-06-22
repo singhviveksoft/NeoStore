@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/myCartFragment"
         android:name="com.example.neosoftassignmentproject.MyCartFragment"
-        android:label="fragment_my_cart"
+        android:label="My Cart"
         tools:layout="@layout/fragment_my_cart" >
         <action
             android:id="@+id/action_myCartFragment_to_addAddressFragment"
@@ -25,7 +25,7 @@
     <fragment
         android:id="@+id/productListFragment"
         android:name="com.example.neosoftassignmentproject.ProductListFragment"
-        android:label="fragment_product_list"
+        android:label="Product List"
         tools:layout="@layout/fragment_product_list" >
         <argument
             android:name="product_category_id"
@@ -43,7 +43,7 @@
     <fragment
         android:id="@+id/productDetailFragment"
         android:name="com.example.neosoftassignmentproject.ProductDetailFragment"
-        android:label="fragment_product_detail"
+        android:label="Product Detail"
         tools:layout="@layout/fragment_product_detail" >
         <argument
             android:name="product_id"
@@ -55,7 +55,7 @@
     <fragment
         android:id="@+id/addAddressFragment"
         android:name="com.example.neosoftassignmentproject.AddAddressFragment"
-        android:label="fragment_add_address"
+        android:label="Add Address"
         tools:layout="@layout/fragment_add_address" >
         <action
             android:id="@+id/action_addAddressFragment_to_addresslistFragment"
@@ -64,7 +64,7 @@
     <fragment
         android:id="@+id/addresslistFragment"
         android:name="com.example.neosoftassignmentproject.AddresslistFragment"
-        android:label="fragment_addresslist"
+        android:label="Address list"
         tools:layout="@layout/fragment_addresslist" >
         <action
             android:id="@+id/action_addresslistFragment_to_myOrderFragment"
@@ -73,7 +73,7 @@
     <fragment
         android:id="@+id/myOrderFragment"
         android:name="com.example.neosoftassignmentproject.MyOrderFragment"
-        android:label="fragment_my_order"
+        android:label="My Order"
         tools:layout="@layout/fragment_my_order" >
         <action
             android:id="@+id/action_myOrderFragment_to_orderDetailFragment"
@@ -82,7 +82,7 @@
     <fragment
         android:id="@+id/orderDetailFragment"
         android:name="com.example.neosoftassignmentproject.OrderDetailFragment"
-        android:label="fragment_order_detail"
+        android:label="Order Detail"
         tools:layout="@layout/fragment_order_detail" >
         <argument
             android:name="order_id"
@@ -106,7 +106,7 @@
     <fragment
         android:id="@+id/tableFragment"
         android:name="com.example.neosoftassignmentproject.TableFragment"
-        android:label="fragment_table"
+        android:label="Table"
         tools:layout="@layout/fragment_table" >
         <action
             android:id="@+id/action_tableFragment_to_productDetailFragment"
@@ -115,7 +115,7 @@
     <fragment
         android:id="@+id/BedsFragment"
         android:name="com.example.neosoftassignmentproject.BedsFragment"
-        android:label="fragment_beds"
+        android:label="Beds"
         tools:layout="@layout/fragment_beds" >
         <action
             android:id="@+id/action_BedsFragment_to_productDetailFragment"
@@ -124,7 +124,7 @@
     <fragment
         android:id="@+id/chairsFragment"
         android:name="com.example.neosoftassignmentproject.ChairsFragment"
-        android:label="fragment_chairs"
+        android:label="Chairs"
         tools:layout="@layout/fragment_chairs" >
         <action
             android:id="@+id/action_chairsFragment_to_productDetailFragment"
@@ -133,7 +133,7 @@
     <fragment
         android:id="@+id/sofaFragment"
         android:name="com.example.neosoftassignmentproject.SofaFragment"
-        android:label="fragment_sofa"
+        android:label="Sofa"
         tools:layout="@layout/fragment_sofa" >
         <action
             android:id="@+id/action_sofaFragment_to_productDetailFragment"
@@ -142,7 +142,7 @@
     <fragment
         android:id="@+id/myAccountFragment"
         android:name="com.example.neosoftassignmentproject.MyAccountFragment"
-        android:label="MyAccountFragment" >
+        android:label="MyAccount" >
         <action
             android:id="@+id/action_myAccountFragment_to_changePwdFragment"
             app:destination="@id/changePwdFragment" />
@@ -150,10 +150,15 @@
     <fragment
         android:id="@+id/changePwdFragment"
         android:name="com.example.neosoftassignmentproject.ChangePwdFragment"
-        android:label="ChangePwdFragment" />
+        android:label="Reset Password" />
     <fragment
         android:id="@+id/storeLocatorFragment"
         android:name="com.example.neosoftassignmentproject.StoreLocatorFragment"
         android:label="fragment_store_locator"
         tools:layout="@layout/fragment_store_locator" />
+    <fragment
+        android:id="@+id/myStoreMapsFragment"
+        android:name="com.example.neosoftassignmentproject.MyStoreMapsFragment"
+        android:label="Store Locator"
+        tools:layout="@layout/fragment_my_store_maps" />
 </navigation>

@@ -33,7 +33,7 @@
         android:title="@string/my_account"></item>
 
     <item
-        android:id="@+id/storeLocatorFragment"
+        android:id="@+id/myStoreMapsFragment"
         android:icon="@drawable/storelocator_icon"
         android:title="@string/store_locator"></item>
 

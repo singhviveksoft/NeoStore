@@ -72,7 +72,7 @@ class AddressAdapter(val click:clickItem):RecyclerView.Adapter<AddressAdapter.Us
              notifyDataSetChanged()
               val address=binding.addressTxt.text.toString()
 
-            CoroutineScope(Dispatchers.Main).launch{
+            CoroutineScope(Dispatchers.IO).launch{
                 adddress(address)
             }
 

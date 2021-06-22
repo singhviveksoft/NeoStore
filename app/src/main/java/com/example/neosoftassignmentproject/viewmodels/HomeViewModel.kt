@@ -6,13 +6,26 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.neosoftassignmentproject.constants.UserPreferences
-import com.example.neosoftassignmentproject.model.ChangePwd
-import com.example.neosoftassignmentproject.model.GetProductCategiryData
-import com.example.neosoftassignmentproject.model.UpdateProfile
+import com.example.neosoftassignmentproject.constants.utils.ApiResult
+import com.example.neosoftassignmentproject.model.*
+import com.example.neosoftassignmentproject.repository.CategoryRepository
 import com.example.neosoftassignmentproject.repository.UserRepository
 import kotlinx.coroutines.launch
 
-class HomeViewModel(val repository: UserRepository):ViewModel() {
+class HomeViewModel(val repository: CategoryRepository):ViewModel() {
+  val getCategory=repository.getCatrgy
+
+   //data observer for back press
+    var isDataAvailable=MutableLiveData<Boolean?>()
+    val _isDataAvailable:LiveData<Boolean?>
+        get() = isDataAvailable
+
+
+    private val apiResult=MutableLiveData<ApiResult>()
+    val _apiResult:LiveData<ApiResult>
+        get() = apiResult
+
+
     private val product=MutableLiveData<GetProductCategiryData>()
     val getProduct:LiveData<GetProductCategiryData>
     get() = product
@@ -74,18 +87,36 @@ class HomeViewModel(val repository: UserRepository):ViewModel() {
                           confirm_password:String){
          viewModelScope.launch {
 
-
+             apiResult.value=ApiResult.Loading
         try {
-            val response=repository.changePwd(access_token,old_password,password,password)
-
+            val response=repository.changePwd(access_token,old_password,password,confirm_password)
+            apiResult.value=ApiResult.Success(response.user_msg)
             changePwd.value=response
         }catch (ex:Exception){
             Log.i("HomeViewModel","${ex.message.toString()}")
+            apiResult.value=ApiResult.Error(ex.message.toString())
 
         }
 
          }
      }
+
+
+    fun saveCategory(cartgy:List<ProductCategory>){
+        viewModelScope.launch {
+            apiResult.value=ApiResult.Loading
+
+            try {
+              val response= repository.insertCatrgy(cartgy)
+                apiResult.value=ApiResult.Success("category added")
+
+            } catch (ex:Exception)
+          {
+              apiResult.value=ApiResult.Error(ex.message.toString())
+
+          }
+        }
+    }
 
 
 }

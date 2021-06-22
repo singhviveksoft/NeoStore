@@ -1,14 +1,15 @@
 package com.example.neosoftassignmentproject
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.neosoftassignmentproject.adapter.MyOrderAdapter
 import com.example.neosoftassignmentproject.constants.UserPreferences
 import com.example.neosoftassignmentproject.constants.interfaces.Api
@@ -30,9 +31,17 @@ private val api= Api.getInstance()
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding= FragmentMyOrderBinding.inflate(inflater,container,false)
-        viewModel=ViewModelProvider(requireActivity(),UserViewmodelfactory(UserRepository(api))).get(MyOrderListViewModel::class.java)
+        binding= FragmentMyOrderBinding.inflate(inflater, container, false)
+        viewModel=ViewModelProvider(requireActivity(), UserViewmodelfactory(UserRepository(api))).get(
+            MyOrderListViewModel::class.java
+        )
         myOrderAdapter= MyOrderAdapter(this)
+        binding.rvMyOrder.addItemDecoration(
+            DividerItemDecoration(
+                binding.rvMyOrder.getContext(),
+                DividerItemDecoration.VERTICAL
+            )
+        )
         binding.rvMyOrder.adapter=myOrderAdapter
         return binding.root
     }
@@ -46,7 +55,7 @@ private val api= Api.getInstance()
         }
 
         viewModel._myOrder.observe(requireActivity(), Observer {
-            if (it!=null&&it.data!=null){
+            if (it != null && it.data != null) {
                 myOrderAdapter.addOrder(it.data)
             }
         })

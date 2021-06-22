@@ -10,14 +10,18 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.neosoftassignmentproject.adapter.ProductListAdapter
 import com.example.neosoftassignmentproject.constants.interfaces.Api
+import com.example.neosoftassignmentproject.constants.utils.InternetConnection
 import com.example.neosoftassignmentproject.databinding.FragmentProductListBinding
 import com.example.neosoftassignmentproject.model.ProductCategory
 import com.example.neosoftassignmentproject.model.ProductListData
 import com.example.neosoftassignmentproject.repository.UserRepository
 import com.example.neosoftassignmentproject.viewModelFactory.UserViewmodelfactory
 import com.example.neosoftassignmentproject.viewmodels.ProductListViewModel
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_home_screen.*
 
 
 class ProductListFragment : Fragment(),ProductListAdapter.clickItem {
@@ -61,7 +65,6 @@ private lateinit var binding: FragmentProductListBinding
         super.onViewCreated(view, savedInstanceState)
        val product_category_id=args.productCategoryId
         name=args.name
-        viewModel.getProductList(product_category_id)
       //  Toast.makeText(requireContext(), "$product_id", Toast.LENGTH_SHORT).show()
       /* if (prod_catgry_id=="0"&&prod_catg_name=="0") {
            viewModel.getProductList(product_category_id)
@@ -71,8 +74,31 @@ private lateinit var binding: FragmentProductListBinding
            name=prod_catg_name
 
        }*/
+        InternetConnection(requireContext()).observe(viewLifecycleOwner, Observer { isNetworkAvailable ->
+            if (!isNetworkAvailable) {
+                Snackbar.make(
+                    binding.root,
+                    "no internet connection",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }else{
+                viewModel.getProductList(product_category_id)
+
+            }
+
+        })
+
 
         adapter= ProductListAdapter(this)
+
+        binding.rvProduct.addItemDecoration(
+            DividerItemDecoration(
+                binding.rvProduct.getContext(),
+                DividerItemDecoration.VERTICAL
+            )
+        )
+
+
         binding.rvProduct.adapter=adapter
         viewModel.ProductList.observe(viewLifecycleOwner, Observer {
           arrayList.clear()

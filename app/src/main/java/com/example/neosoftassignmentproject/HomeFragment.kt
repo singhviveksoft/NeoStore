@@ -22,11 +22,15 @@ import com.example.neosoftassignmentproject.adapter.SlideImageAdapter
 import com.example.neosoftassignmentproject.adapter.UserProductAdapter
 import com.example.neosoftassignmentproject.constants.UserPreferences
 import com.example.neosoftassignmentproject.constants.interfaces.Api
+import com.example.neosoftassignmentproject.constants.utils.ApiResult
 import com.example.neosoftassignmentproject.constants.utils.InternetConnection
 
 import com.example.neosoftassignmentproject.databinding.FragmentHomeBinding
+import com.example.neosoftassignmentproject.db.DataBase
 import com.example.neosoftassignmentproject.model.ProductCategory
+import com.example.neosoftassignmentproject.repository.CategoryRepository
 import com.example.neosoftassignmentproject.repository.UserRepository
+import com.example.neosoftassignmentproject.viewModelFactory.CateyDBViewModelFactory
 import com.example.neosoftassignmentproject.viewModelFactory.UserViewmodelfactory
 import com.example.neosoftassignmentproject.viewmodels.HomeViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -47,10 +51,11 @@ class HomeFragment : Fragment(),UserProductAdapter.clickItem{
 private lateinit var viewModel: HomeViewModel
 private lateinit var userProductAdapter: UserProductAdapter
 
-
+    private lateinit var db: DataBase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel=ViewModelProvider(this,UserViewmodelfactory(UserRepository(api))).get(HomeViewModel::class.java)
+        db= DataBase.getInstance(requireContext())
+        viewModel=ViewModelProvider(requireActivity(), CateyDBViewModelFactory(CategoryRepository(api,db))).get(HomeViewModel::class.java)
 
 
     }
@@ -74,6 +79,29 @@ private lateinit var userProductAdapter: UserProductAdapter
         super.onViewCreated(view, savedInstanceState)
 
 
+        InternetConnection(requireContext()).observe(viewLifecycleOwner, Observer {isNetworkAvailable ->
+            if (isNetworkAvailable) {
+                viewModel.getProduct.observe(viewLifecycleOwner, Observer {
+                    arrayList.clear()
+
+
+                    arrayList.addAll(it.data.product_categories)
+                    viewModel.saveCategory(arrayList)
+                    //  userProductAdapter.addProduct(arrayList)
+                    //  Toast.makeText(requireContext(), "yyyy", Toast.LENGTH_SHORT).show()
+                    // }
+                })
+
+            }
+            else{
+                Snackbar.make(
+                    binding.root,
+                    "no internect connection",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+
+            }
+        })
 
 
         imageArrayList.add(requireContext().resources.getDrawable(R.drawable.slider_img1))
@@ -89,16 +117,52 @@ private lateinit var userProductAdapter: UserProductAdapter
         }
 //observer
 
-      viewModel.getProduct.observe(viewLifecycleOwner, Observer {
-            arrayList.clear()
+/*
+        viewModel._apiResult.observe(viewLifecycleOwner){
+            when (it) {
+                is ApiResult.Success -> {
+*/
+/*
+                    Snackbar.make(
+                        binding.root,
+                        "${it.msg}",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+*//*
 
-           // if (it){
-            arrayList.addAll(it.data.product_categories)
-           // for (i in arrayList.indices){
-                userProductAdapter.addProduct(arrayList)
-      //  Toast.makeText(requireContext(), "yyyy", Toast.LENGTH_SHORT).show()
-           // }
-        })
+                    // viewModel.isDataAvailable.value = null
+
+                    //  binding.progressBar.isVisible = false
+                }
+                is ApiResult.Error -> {
+                    Snackbar.make(
+                        binding.root,
+                        "${it.message}",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                    //  binding.progressBar.isVisible = false
+                }
+                is ApiResult.Loading -> {
+                    Snackbar.make(
+                        binding.root,
+                        "Loading",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                    //  binding.progressBar.isVisible = false
+                }
+
+            }
+
+        }
+*/
+
+
+
+        viewModel.getCategory.observe(viewLifecycleOwner){
+        if (it.size!=0)
+             //   Toast.makeText(requireContext(), "${it[0].id.toString()}", Toast.LENGTH_SHORT).show()
+            userProductAdapter.addProduct(it)
+        }
 
 
 
@@ -126,7 +190,7 @@ private lateinit var userProductAdapter: UserProductAdapter
             Snackbar.make(
                 binding.root,
                 "${isNetworkAvailable.toString()}",
-                Snackbar.LENGTH_LONG
+                Snackbar.LENGTH_SHORT
             ).show()
 
         })
@@ -173,23 +237,8 @@ private lateinit var userProductAdapter: UserProductAdapter
     }
 
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-      //  Toast.makeText(requireContext(), "onActivityCreated", Toast.LENGTH_SHORT).show()
-
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-      //  viewModel.getProduct.removeObservers(requireActivity())
 
 
-    }
 
     override fun onPause() {
         super.onPause()

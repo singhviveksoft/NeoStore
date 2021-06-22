@@ -1,40 +1,32 @@
 package com.example.neosoftassignmentproject
 
 import android.app.AlertDialog
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RatingBar
-import android.widget.Toast
-import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DividerItemDecoration
+import com.example.neosoftassignmentproject.adapter.ProductImageAdapter
 import com.example.neosoftassignmentproject.constants.UserPreferences
 import com.example.neosoftassignmentproject.constants.interfaces.Api
-import com.example.neosoftassignmentproject.constants.utils.ApiResponse
 import com.example.neosoftassignmentproject.constants.utils.ApiResult
 import com.example.neosoftassignmentproject.databinding.FragmentProductDetailBinding
-import com.example.neosoftassignmentproject.databinding.RatingBarPopupBinding
 import com.example.neosoftassignmentproject.model.ProductDetailData
+import com.example.neosoftassignmentproject.model.ProductImage
 import com.example.neosoftassignmentproject.repository.UserRepository
 import com.example.neosoftassignmentproject.viewModelFactory.UserViewmodelfactory
-import com.example.neosoftassignmentproject.viewmodels.LoginViewmodel
 import com.example.neosoftassignmentproject.viewmodels.ProductDetailViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.cart_quatity_popup.*
 import kotlinx.android.synthetic.main.rating_bar_popup.*
-import kotlinx.coroutines.launch
 
 
-class ProductDetailFragment : Fragment() {
+class ProductDetailFragment : Fragment() ,ProductImageAdapter.clickItem{
   val args:ProductDetailFragmentArgs by navArgs()
   //  val categoryName:ProductDetailFragmentArgs by navArgs()
     private lateinit var binding:FragmentProductDetailBinding
@@ -46,11 +38,14 @@ class ProductDetailFragment : Fragment() {
     var image:String?=null
     var name:String?=null
     var check:Boolean?=null
+    private lateinit var myAdapter:ProductImageAdapter
+    private var imageArraylist= arrayListOf<ProductImage>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel=ViewModelProvider(this,UserViewmodelfactory(UserRepository(api))).get(
-            ProductDetailViewModel::class.java)
+        viewModel=ViewModelProvider(this, UserViewmodelfactory(UserRepository(api))).get(
+            ProductDetailViewModel::class.java
+        )
 
     }
 
@@ -60,8 +55,14 @@ class ProductDetailFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding=FragmentProductDetailBinding.inflate(inflater, container, false)
-
-
+        myAdapter= ProductImageAdapter(this)
+        binding.rvImage.adapter=myAdapter
+        binding.rvImage.addItemDecoration(
+            DividerItemDecoration(
+                binding.rvImage.getContext(),
+                DividerItemDecoration.HORIZONTAL
+            )
+        )
         return binding.root
     }
 
@@ -75,20 +76,22 @@ class ProductDetailFragment : Fragment() {
 
      // observer
         viewModel.productDetail.observe(viewLifecycleOwner, Observer {
-             name=it.data.name
-            val producer=it.data.producer
-            val description=it.data.description
-            val rating=it.data.rating
-            val price= it.data.cost
-             image=it.data.product_images[0].image
+            myAdapter.addProduct(it.data.product_images)
 
-            binding.productNameTxt.text=name
-            binding.productProducerTxt.text=producer
-            binding.productCategoryNameTxt.text=categoryName
-            binding.descriptionTxt.text=description
-            binding.ratingBar.rating=rating.toFloat()
+            name = it.data.name
+            val producer = it.data.producer
+            val description = it.data.description
+            val rating = it.data.rating
+            val price = it.data.cost
+            image = it.data.product_images[0].image
+
+            binding.productNameTxt.text = name
+            binding.productProducerTxt.text = producer
+            binding.productCategoryNameTxt.text = categoryName
+            binding.descriptionTxt.text = description
+            binding.ratingBar.rating = rating.toFloat()
             binding.prductImage.LoadImg(image!!)
-            binding.productPriceText.text="Rs. "+price.toString()
+            binding.productPriceText.text = "Rs. " + price.toString()
         })
 
 
@@ -106,35 +109,35 @@ class ProductDetailFragment : Fragment() {
 
       //  lifecycleScope.launch {
           viewModel._addToCart.observe(viewLifecycleOwner, Observer {
-              if (it!=null){
+              if (it != null) {
                   viewModel._apiResult.observe(viewLifecycleOwner, Observer {
 
-                      when(it){
-                          is ApiResult.Success->{
+                      when (it) {
+                          is ApiResult.Success -> {
                               Snackbar.make(
                                   binding.constraintLayout,
                                   "${it.msg}",
-                                  Snackbar.LENGTH_LONG
+                                  Snackbar.LENGTH_SHORT
                               ).show()
-                              viewModel.oneTimeCall.value==true
+                              viewModel.oneTimeCall.value == true
                               //  binding.progressBar.isVisible = false
                           }
-                          is ApiResult.Error->{
+                          is ApiResult.Error -> {
                               Snackbar.make(
                                   binding.constraintLayout,
                                   "${it.message}",
-                                  Snackbar.LENGTH_LONG
+                                  Snackbar.LENGTH_SHORT
                               ).show()
-                              viewModel.oneTimeCall.value==true
+                              viewModel.oneTimeCall.value == true
                               //  binding.progressBar.isVisible = false
                           }
-                          is ApiResult.Loading->{
+                          is ApiResult.Loading -> {
                               Snackbar.make(
                                   binding.constraintLayout,
                                   "Loading",
-                                  Snackbar.LENGTH_LONG
+                                  Snackbar.LENGTH_SHORT
                               ).show()
-                              viewModel.oneTimeCall.value==true
+                              viewModel.oneTimeCall.value == true
                               //  binding.progressBar.isVisible = false
                           }
 
@@ -151,47 +154,47 @@ class ProductDetailFragment : Fragment() {
 
 
         viewModel._rating.observe(viewLifecycleOwner, Observer {
-        if (it != null) {
-            viewModel._apiResult.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                viewModel._apiResult.observe(viewLifecycleOwner, Observer {
 
-                 when(it){
-                    is ApiResult.Success->{
-                        Snackbar.make(
-                            binding.constraintLayout,
-                            "${it.msg}",
-                            Snackbar.LENGTH_LONG
-                        ).show()
-                        viewModel.oneTimeCall.value==true
-                        //  binding.progressBar.isVisible = false
+                    when (it) {
+                        is ApiResult.Success -> {
+                            Snackbar.make(
+                                binding.constraintLayout,
+                                "${it.msg}",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                            viewModel.oneTimeCall.value == true
+                            //  binding.progressBar.isVisible = false
+                        }
+                        is ApiResult.Error -> {
+                            Snackbar.make(
+                                binding.constraintLayout,
+                                "${it.message}",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                            viewModel.oneTimeCall.value == true
+                            //  binding.progressBar.isVisible = false
+                        }
+                        is ApiResult.Loading -> {
+                            Snackbar.make(
+                                binding.constraintLayout,
+                                "Loading",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                            viewModel.oneTimeCall.value == true
+                            //  binding.progressBar.isVisible = false
+                        }
+
                     }
-                    is ApiResult.Error->{
-                        Snackbar.make(
-                            binding.constraintLayout,
-                            "${it.message}",
-                            Snackbar.LENGTH_LONG
-                        ).show()
-                        viewModel.oneTimeCall.value==true
-                        //  binding.progressBar.isVisible = false
-                    }
-                    is ApiResult.Loading->{
-                        Snackbar.make(
-                            binding.constraintLayout,
-                            "Loading",
-                            Snackbar.LENGTH_LONG
-                        ).show()
-                        viewModel.oneTimeCall.value==true
-                        //  binding.progressBar.isVisible = false
-                    }
-
-                }
 
 
-            })
+                })
 
-        }
+            }
 
 
-    })
+        })
 
 
 }
@@ -205,8 +208,8 @@ class ProductDetailFragment : Fragment() {
 
     }
 
-    private fun ratingPopUp(product_id:String){
-        val ratingBarPopUp=layoutInflater.inflate(R.layout.rating_bar_popup,null)
+    private fun ratingPopUp(product_id: String){
+        val ratingBarPopUp=layoutInflater.inflate(R.layout.rating_bar_popup, null)
         val customDialog = AlertDialog.Builder(requireContext())
             .setView(ratingBarPopUp)
             .show()
@@ -217,7 +220,7 @@ class ProductDetailFragment : Fragment() {
         btn.setOnClickListener {
 
             val rating=ratingBar.rating
-            viewModel.addRating(product_id,rating)
+            viewModel.addRating(product_id, rating)
 
             customDialog.dismiss()
             //  Toast.makeText(requireContext(), "$rating", Toast.LENGTH_SHORT).show()
@@ -238,7 +241,7 @@ class ProductDetailFragment : Fragment() {
 
 
 
-    private fun cartPopUp(product_id:String){
+    private fun cartPopUp(product_id: String){
        /* val Dialog = Dialog(requireActivity())
         Dialog.window?.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         Dialog.window?.setBackgroundDrawable(ColorDrawable.)
@@ -250,7 +253,7 @@ class ProductDetailFragment : Fragment() {
 
         Dialog.show()*/
 
-        val cartPopUp=layoutInflater.inflate(R.layout.cart_quatity_popup,null)
+        val cartPopUp=layoutInflater.inflate(R.layout.cart_quatity_popup, null)
         val customDialog=AlertDialog.Builder(requireContext())
             .setView(cartPopUp)
             .show()
@@ -287,10 +290,14 @@ class ProductDetailFragment : Fragment() {
     private fun acessToken(){
     }
 
+    override fun onClick(productImage: ProductImage) {
+        binding.prductImage.LoadImg(productImage.image)
+    }
 
-  /*  override fun onPause() {
-        super.onPause()
-        binding.root==null
 
-    }*/
+    /*  override fun onPause() {
+          super.onPause()
+          binding.root==null
+
+      }*/
 }

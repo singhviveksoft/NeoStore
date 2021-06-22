@@ -68,8 +68,9 @@ class AddAdressViewModel(val repository: AddressRepository):ViewModel() {
                         apiResult.value=ApiResult.Loading
                         try {
                             repository.insertAddress(listOf(response))
+                            isDataAvailable.value=true
                             apiResult.value=ApiResult.Success("Address add successfull")
-                              isDataAvailable.value=true
+
                             //   arrayList.add(response)
                             // getAddress.value = arrayList
                             //   Log.i("addressList", "${getAddress.value}")
@@ -114,6 +115,7 @@ class AddAdressViewModel(val repository: AddressRepository):ViewModel() {
 
                 val response=repository.placeOrder(access_token,address)
                 placeOrder.value=response
+                isDataAvailable.value=true
                 apiResult.value=ApiResult.Success("${response.user_msg}")
 
             }

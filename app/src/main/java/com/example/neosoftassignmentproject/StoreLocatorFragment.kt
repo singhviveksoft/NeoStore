@@ -54,7 +54,7 @@ private val api=com.example.neosoftassignmentproject.constants.interfaces.Api.ge
                     Snackbar.make(
                         binding.root,
                         "${it.msg}",
-                        Snackbar.LENGTH_LONG
+                        Snackbar.LENGTH_SHORT
                     ).show()
                     //  viewModel._apiResult.removeObservers(viewLifecycleOwner)
 
@@ -73,7 +73,7 @@ private val api=com.example.neosoftassignmentproject.constants.interfaces.Api.ge
                     Snackbar.make(
                         binding.root,
                         "${it.message}",
-                        Snackbar.LENGTH_LONG
+                        Snackbar.LENGTH_SHORT
                     ).show()
                     //  binding.progressBar.isVisible = false
                     //   viewModel._apiResult.removeObservers(viewLifecycleOwner)
@@ -83,7 +83,7 @@ private val api=com.example.neosoftassignmentproject.constants.interfaces.Api.ge
                     Snackbar.make(
                         binding.root,
                         "Loading",
-                        Snackbar.LENGTH_LONG
+                        Snackbar.LENGTH_SHORT
                     ).show()
                     //  binding.progressBar.isVisible = false
                     //  viewModel._apiResult.removeObservers(viewLifecycleOwner)

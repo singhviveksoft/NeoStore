@@ -15,10 +15,14 @@ import com.example.neosoftassignmentproject.HomeScreenActivity
 import com.example.neosoftassignmentproject.R
 import com.example.neosoftassignmentproject.constants.UserPreferences
 import com.example.neosoftassignmentproject.constants.interfaces.Api
+import com.example.neosoftassignmentproject.constants.utils.ApiResult
+import com.example.neosoftassignmentproject.constants.utils.Validation.Companion.isEmailId
+import com.example.neosoftassignmentproject.constants.utils.Validation.Companion.isValidPassword
 import com.example.neosoftassignmentproject.databinding.FragmentLoginBinding
 import com.example.neosoftassignmentproject.repository.UserRepository
 import com.example.neosoftassignmentproject.viewModelFactory.UserViewmodelfactory
 import com.example.neosoftassignmentproject.viewmodels.LoginViewmodel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
 
@@ -35,7 +39,7 @@ class LoginFragment : Fragment() {
         // Inflate the layout for this fragment
         loginBinding=DataBindingUtil.inflate(inflater,R.layout.fragment_login,container,false)
 
-        loginViewmodel=ViewModelProvider(requireActivity(),UserViewmodelfactory(UserRepository(api))).get(LoginViewmodel::class.java)
+        loginViewmodel=ViewModelProvider(this,UserViewmodelfactory(UserRepository(api))).get(LoginViewmodel::class.java)
 
         loginBinding.loginViewModel=loginViewmodel
         return loginBinding.root
@@ -44,10 +48,42 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        loginViewmodel._apiResult.observe(viewLifecycleOwner, Observer {
+
+            when (it) {
+                is ApiResult.Success -> {
+                    Snackbar.make(
+                        loginBinding.root,
+                        "${it.msg}",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+
+                    //  binding.progressBar.isVisible = false
+                }
+                is ApiResult.Error -> {
+                    Snackbar.make(
+                        loginBinding.root,
+                        "${it.message}",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                    //  binding.progressBar.isVisible = false
+                }
+                is ApiResult.Loading -> {
+                    Snackbar.make(
+                        loginBinding.root,
+                        "Loading",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                    //  binding.progressBar.isVisible = false
+                }
+
+            }
+
+        })
 
 
 
-            loginViewmodel._userLogin?.observe(requireActivity(), Observer {
+            loginViewmodel._userLogin?.observe(viewLifecycleOwner, Observer {
             if (it==null){
                 FLAG=false
             }else{
@@ -57,6 +93,7 @@ class LoginFragment : Fragment() {
 
               val intent=Intent(requireContext(), HomeScreenActivity::class.java)
                 startActivity(intent)
+                activity?.finish()
 
             }
         })
@@ -74,13 +111,13 @@ class LoginFragment : Fragment() {
 
 
 
+        if (userInput()) {
 
 
-
-                loginViewmodel.userLogin()
-
+            loginViewmodel.userLogin()
 
 
+        }
 
         }
     }
@@ -92,5 +129,22 @@ class LoginFragment : Fragment() {
         lifecycleScope.launch {
             userPreferences.setAccesToken(aceess_token)
         }
+    }
+
+
+    private fun userInput():Boolean{
+         if (!loginBinding.emailEdttxt.text.toString().isEmailId(loginBinding.emailEdttxt.text.toString()))
+        {
+            loginBinding.emailEdttxt.error="Enter your proper email id"
+            return false
+
+        }
+         else  if (!loginBinding.pwdEdttxt.text.toString().isValidPassword(loginBinding.pwdEdttxt.text.toString()))
+         {
+
+             loginBinding.pwdEdttxt.error="Enter a strong password of minimum 8 digit"
+             return false
+         }
+        return true
     }
 }
